@@ -16,6 +16,6 @@ func NewClientServer(_port int) *Client_Server {
 }
 
 func (client_s *Client_Server) RunServer() {
-	fmt.Println("Starting Client server... ")	
+	fmt.Println("[Client_Server] Starting Client server... ")	
 	//TODO entire client handling
 }

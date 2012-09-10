@@ -19,7 +19,7 @@ func NewMainServer() *Main_Server {
 }
 
 func (main_s *Main_Server) RunServer() {
-	fmt.Println("Starting Main server... ")
+	fmt.Println("[Main_Server] Starting Main server... ")
     //Initiate different servers
     g_cam_server = NewCamServer(CAMSERVER_PORT)
     g_client_server = NewClientServer(CLIENTSERVER_PORT)
@@ -27,6 +27,8 @@ func (main_s *Main_Server) RunServer() {
 	//Start multiple servers in seperate threads (GoRoutines)
 	go g_cam_server.RunServer() //Manages camera in-/output
    	go g_client_server.RunServer() //Manages clients (GUI) in-/output
+   	
+   	fmt.Println("[Main_Server] Main server running")
    	
 	for {
     	//Gosched yields the processor, allowing other goroutines to run

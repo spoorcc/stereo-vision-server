@@ -9,5 +9,4 @@ import
 type Client struct {
 	id int
 	socket   net.Conn
-	loggedIn bool
 }

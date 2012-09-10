@@ -3,7 +3,8 @@ package main
 import
 (
 	"fmt"
-//	"net"
+	"net"
+	"os"
 )
 
 type Camera_Server struct {
@@ -16,6 +17,36 @@ func NewCamServer(_port int) *Camera_Server {
 }
 
 func (cam_s *Camera_Server) RunServer() {
-    fmt.Println("Starting Camera server... ")	
+    fmt.Println("[Camera_Server] Starting Camera server... ")	
 	//TODO entire camera handling
+	
+	//Resolve UDP address, it's only looking to the port
+	service := fmt.Sprintf(":%d", cam_s.port)
+	udpAddr, err := net.ResolveUDPAddr("up4", service)
+	checkError(err)
+
+	//Listen UDP on the port
+	conn, err := net.ListenUDP("udp", udpAddr)
+	checkError(err)
+	
+	fmt.Printf("[Camera_Server] Camera server running... Listening to %s [%s]", udpAddr.String(), udpAddr.Network())
+	
+	// close connection on exit
+	defer conn.Close()
+	
+	var buf [512]byte
+	for {
+		// read upto 512 bytes
+		n, err := conn.Read(buf[0:])
+		checkError(err)
+		
+		fmt.Printf("Bytes: %d", n)	
+	}
+}
+
+func checkError(err error) {
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "[Fatal Camera_Server error] ", err.Error())
+		os.Exit(1)
+	}
 }
