@@ -9,6 +9,7 @@ Dit kost even tijd (+/- 30-60 min, afhankelijk van download snelheid en kleine p
 
 2. Installeer de Go compiler via https://code.google.com/p/go/downloads/list, het makkelijkste is om Go direct in C:/ te installeren.
 Handig om te gebruiken tijdens de installatie: http://golang.org/doc/install/source#install
+Let op dat je ook de GCC compiler hebt geinstalleerd! Dit is nodig om Go te installeren. (zie http://sourceforge.net/projects/mingw/files/)
 
 3. Test of Go daadwerkelijk is geinstalleerd door de Hello World te testen d.m.v. http://golang.org/doc/install/source#testing. Een veel voorkomende fout is wanneer de environment variables niet correct zijn ingevuld. Als de test mislukt, volg dan dus http://golang.org/doc/install/source#environment
 
