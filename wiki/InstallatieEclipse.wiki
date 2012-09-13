@@ -19,7 +19,7 @@ In principe kun je nu aan de slag, maar we willen het project inladen.
 
 4. Open Eclipse. Maak ergens een workspace aan. Zorg dat dit lokaal is en niet op dropbox of iets dergelijks. Onthoud dit pad, dit heb je in stap 8 nodig!
 
-5. Installeer de Go plugin voor Eclipse Dit gaat als volgt: Klik op "Help" -> "Install New Software". Druk op Add en noem het "Go" of iets dergelijks. Vink GoClipse aan en druk een aantal keer op next om de installatie te starten. Start vervolgens eclipse opnieuw op.
+5. Installeer de Go plugin voor Eclipse Dit gaat als volgt: Klik op "Help" -> "Install New Software". Druk op Add en noem het "Go" of iets dergelijks. Vink GoClipse aan en druk een aantal keer op next om de installatie te starten. Start vervolgens eclipse opnieuw op. (http://goclipse.googlecode.com/svn/trunk/goclipse-update-site/)
 
 6. Installeer vervolgens op eenzelfde manier de SVN Team Provide Plugin. Plak nu http://download.eclipse.org/technology/subversive/1.0/update-site/ in de bovenste balk. Klik vervolgens alleen "Subversive SVN Team Provide Plugin" aan en druk op next om de plugin te installeren. Start na de installatie eclipse opnieuw op.
 
