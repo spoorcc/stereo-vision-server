@@ -29,7 +29,7 @@ func (cam_s *Camera_Server) RunServer() {
 	conn, err := net.ListenUDP("udp", udpAddr)
 	checkError(err)
 	
-	fmt.Printf("[Camera_Server] Camera server running... Listening to %s [%s]", udpAddr.String(), udpAddr.Network())
+	fmt.Printf("[Camera_Server] Camera server running... Listening to %s [%s]\n", udpAddr.String(), udpAddr.Network())
 	
 	// close connection on exit
 	defer conn.Close()
@@ -40,7 +40,7 @@ func (cam_s *Camera_Server) RunServer() {
 		n, err := conn.Read(buf[0:])
 		checkError(err)
 		
-		fmt.Printf("Bytes: %d", n)	
+		fmt.Printf("Bytes: %d, Message: %s", n, string(buf[0:n]))	
 	}
 }
 
