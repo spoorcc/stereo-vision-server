@@ -40,7 +40,7 @@ func (cam_s *Camera_Server) RunServer() {
 		n, err := conn.Read(buf[0:])
 		checkError(err)
 		
-		fmt.Printf("Bytes: %d, Message: %s", n, string(buf[0:n]))	
+		fmt.Printf("[Camera_Server] [Receive] Bytes: %d, msg: %s\n", n, string(buf[0:n]))	
 	}
 }
 
