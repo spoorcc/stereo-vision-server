@@ -9,6 +9,7 @@ import
 var (
 	g_cam_server *Camera_Server
 	g_client_server *Client_Server
+	g_graphics_manager *Graphics_Manager
 		
 )
 
@@ -26,10 +27,11 @@ func (main_s *Main_Server) RunServer() {
     //Initiate different servers
     g_cam_server = NewCamServer(main_s.CamPort)
     g_client_server = NewClientServer(main_s.ClientPort)
-    
+    g_graphics_manager = NewGraphicsManager()
 	//Start multiple servers in seperate threads (GoRoutines)
 	go g_cam_server.RunServer() //Manages camera in-/output
    	go g_client_server.RunServer() //Manages clients (GUI) in-/output
+   	go g_graphics_manager.RunManager()
    	
 	for {
     	//Gosched yields the processor, allowing other goroutines to run
