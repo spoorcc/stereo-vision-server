@@ -5,7 +5,6 @@ import
 	"fmt"
 //	"net"
 	"opencv"
-	"os"
 )
 
 type Graphics_Manager struct {
@@ -18,35 +17,19 @@ func NewGraphicsManager() *Graphics_Manager {
 
 func (graphic_s *Graphics_Manager) RunManager() {
 	fmt.Println("[Graphics_Manager] Starting open CV debug mode... ")	
-	//TODO entire client handling
-		filename := "images/lena.jpg"
-	if len(os.Args) == 2 {
-		filename = os.Args[1]
-	}
+	fmt.Println("[Graphics_Manager] Start 50 frames camera test!")
 
-	image := opencv.LoadImage(filename)
-	if image == nil {
-		panic("LoadImage fail")
-	}
-	defer image.Release()
-
+	capture := opencv.NewCameraCapture(0)	
 	win := opencv.NewWindow("Go-OpenCV")
-	defer win.Destroy()
-
-	win.SetMouseCallback(func(event, x, y, flags int) {
-		fmt.Printf("event = %d, x = %d, y = %d, flags = %d\n",
-			event, x, y, flags,
-		)
-	})
-	win.CreateTrackbar("Thresh", 1, 100, func(pos int) {
-		fmt.Printf("pos = %d\n", pos)
-	})
-
-	win.ShowImage(image)
-
+	i := 0
+	for  {
+		i++
+		img := capture.QueryFrame()
+         
+        win.ShowImage(img)
+        fmt.Printf("[Graphics_Manager] Frame %d opened\n", i)
+        //opencv.WaitKey(0)
+        opencv.WaitKey(50)
+	}
 	opencv.WaitKey(0)
 }
-
-
-
-

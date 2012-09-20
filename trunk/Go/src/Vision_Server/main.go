@@ -30,6 +30,7 @@ func main() {
 	fmt.Printf("[Main] Loading config file... ")
 	if initConfig(configFile) == false {
 		fmt.Printf("[FAILED]\n")
+		for {}
 		return
 	}
 	fmt.Printf("[Succeeded]\n")
@@ -39,6 +40,7 @@ func main() {
     ClientPort, _ := g_config.GetInt("default", "ClientPort")
     g_main_server := NewMainServer(CamPort, ClientPort)
     g_main_server.RunServer()
+    for{}
 }
 
 func initConfig(configFile *string) bool {
