@@ -7,7 +7,7 @@ void main()
 
 	using namespace boost; 
     thread thread_1 = thread(connectServer);
-//	thread thread_2 = thread(camera);
+	thread thread_2 = thread(camera);
 
 	for(;;)
 	{
@@ -55,19 +55,21 @@ void connectServer()
 		}
 	}
 }
-/*
+
 void camera(void)
 {
+
 	CvCapture* capture;
 	IplImage* img = 0;
 
-
+	cvNamedWindow( "Example1", CV_WINDOW_AUTOSIZE );
+	while(true)
+	{
         capture = cvCreateCameraCapture(0);
         img = cvQueryFrame(capture);
-        cvNamedWindow( "Example1", CV_WINDOW_AUTOSIZE );
         cvShowImage("Example1", img);
         cvWaitKey(50);
         cvReleaseImage( &img );
-        cvDestroyWindow("Example1");
+	}
+	 cvDestroyWindow("Example1");
 }
-*/

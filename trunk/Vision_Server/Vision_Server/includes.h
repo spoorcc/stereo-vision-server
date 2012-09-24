@@ -6,13 +6,12 @@
 #include <string>
 #include <sstream>
 #include <boost/thread.hpp>
-
-//#include "highgui.h"
-//#include <cv.h>
-
 #include<WinSock2.h>
 #include<Windows.h>
+#include<iostream>
+
+#include "highgui.h"
+#include <cv.h>
 
 void connectServer();
-#include<iostream>
 void camera(void);
