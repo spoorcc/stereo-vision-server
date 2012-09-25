@@ -1,10 +1,11 @@
 #include "includes.h"
+#include "camera_manager.h"
 
 using namespace std;
 
-#define SERVER "127.0.0.1"	//ip address of udp server
-#define BUFLEN 512	//Max length of buffer
-#define PORT 8888	//The port on which to listen for incoming data
+#define CAMERA_SERVER "127.0.0.1"	//ip address of udp server
+#define BUFLEN 1027					//Max length of buffer
+#define CAMERA_PORT 51912			//The port on which to listen for incoming data
 
 void startCameraManager(void)
 {
