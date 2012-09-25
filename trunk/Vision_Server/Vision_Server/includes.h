@@ -10,8 +10,9 @@
 #include<Windows.h>
 #include<iostream>
 
-#include "highgui.h"
+#include <highgui.h>
 #include <cv.h>
 
-void connectServer();
-void camera(void);
+void startCameraManager(void);
+void startGraphicsManager(void);
+void startClientManager(void);
