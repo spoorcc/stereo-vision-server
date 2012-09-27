@@ -15,6 +15,8 @@ using namespace std;
 #define EQUALIZED_DATA	 0xD0
 #define RECTIFIED_DATA	 0xE0
 #define CORRESPONDENCE	 0xF0
+#define READ				true
+#define WRITE				false
 
 using namespace boost; 
 
@@ -43,7 +45,7 @@ void sendDataToCamera(void)
 	int sent;
 	for (int i = 0; i < 128; i++){
 		range = 128 * i;
-		Packet packet = Packet(RAW_RGB_DATA,range, true);
+		Packet packet = Packet(RAW_RGB_DATA,range, READ);
 		sent = connection.sendPacket(packet);
 		ostringstream stream;  
 		if(sent == -1){
