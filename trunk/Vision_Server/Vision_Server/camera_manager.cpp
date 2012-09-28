@@ -20,6 +20,8 @@ using namespace std;
 
 using namespace boost; 
 
+uint8_t imageBuffer[307200];
+
 void startCameraManager(void)
 {
 	cout << "[Camera Manager] Camera Manager started\n";
@@ -28,8 +30,10 @@ void startCameraManager(void)
 	connection = Camera_Connection();
 	//connection.connectToCamera(CAMERA_IP,CAMERA_PORT);
 	
-	//thread thread_receive = thread(receiveDataFromCamera);
-	thread thread_send = thread(sendDataToCamera);
+	  thread thread_receive = thread(receiveDataFromCamera);
+	  thread thread_makeImage = thread(maikeImage);
+	  
+	//thread thread_send = thread(sendDataToCamera);
 }
 
 void receiveDataFromCamera(void)
@@ -41,7 +45,15 @@ void receiveDataFromCamera(void)
 	
 		if (bufferArray.at(0) == RAW_RGB_DATA)
 		{
+		uint16_t temp = (uint16_t) bufferArray.at(1);
+		uint16_t temp2 = (uint16_t) bufferArray.at(2);
+		uint32_t startPixel = ((temp2<<8) + temp) * 128;
+		printf("%d\n", startPixel);
 
+			for(int i = 0; i < 128; i++)
+			{
+			imageBuffer[startPixel + i ] =  bufferArray.at(4 + i * 8);                              
+			}
 		}
 	}
 
@@ -56,7 +68,7 @@ void sendDataToCamera(void)
 		range = 128 * i;
 		Packet packet = Packet();
 		packet.newPacket(RAW_RGB_DATA,range, READ);
-		for (int j = 0; j < 1100; j++)
+		for (int j = 0; j < 1024; j++)
 		{
 			if(j % 3 == 0){
 				packet.addUint8(0xFF);
@@ -70,5 +82,24 @@ void sendDataToCamera(void)
 		connection.sendPacket(packet);
 		string message;
 		cin >> message;
+	}
+}
+
+void maikeImage(void)
+{
+	for(;;)
+	{
+		string msg;
+		cin >> msg;
+		IplImage* imgTest = cvCreateImage(cvSize(640, 480), IPL_DEPTH_8U, 3);
+        for (int i = 0; i < 307200; i++)
+        {
+			imgTest->imageData[i] = imageBuffer[i];
+        }
+        cvNamedWindow( "Example1", CV_WINDOW_AUTOSIZE );
+        cvShowImage("Example1", imgTest);
+        cvWaitKey(0);
+        cvReleaseImage( &imgTest );
+        cvDestroyWindow("Example1");
 	}
 }

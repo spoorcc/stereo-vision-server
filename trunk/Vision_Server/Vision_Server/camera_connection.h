@@ -22,7 +22,7 @@ private:
 	uint16_t readPos;
 	uint16_t MsgSize;
 	long answer;
-	udp::endpoint sender_endpoint;
+
 	udp::socket socket();
 };
 

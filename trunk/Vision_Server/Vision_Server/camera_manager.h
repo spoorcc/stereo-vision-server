@@ -4,5 +4,9 @@
 void receiveDataFromCamera(void);
 void sendDataToCamera(void);
 void connectToCamera(void);
+void maikeImage(void);
+
+#include "highgui.h"
+#include <cv.h>
 
 Camera_Connection connection;

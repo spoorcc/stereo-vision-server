@@ -42,7 +42,7 @@ void setReadConnection(void)
 	try
 	{
 		udp::endpoint local_endpoint = boost::asio::ip::udp::endpoint(boost::asio::ip::address::from_string("192.168.1.116"), 51912);
-		std::cout << "Local bind " << local_endpoint << std::endl;
+	//	std::cout << "Local bind " << local_endpoint << std::endl;
  
 		boost::asio::io_service read_io_service;
 		udp::socket socket(read_io_service);
@@ -61,11 +61,15 @@ boost::array<uint8_t, 1028> Camera_Connection::read(void)
 	boost::array<uint8_t, 1028> recv_buf;
 	try
 	{
-		udp::endpoint local_endpoint = boost::asio::ip::udp::endpoint(boost::asio::ip::address::from_string("192.168.1.116"), 51912);
+			udp::endpoint sender_endpoint;
+		udp::endpoint local_endpoint = boost::asio::ip::udp::endpoint(boost::asio::ip::address::from_string("192.168.1.109"), 51912);
+//		std::cout << "Local bind " << local_endpoint << std::endl;
+ 
 		boost::asio::io_service read_io_service;
 		udp::socket socket(read_io_service);
 		socket.open(udp::v4());
 		socket.bind(local_endpoint);
+
 		size_t len = socket.receive_from(boost::asio::buffer(recv_buf), sender_endpoint);
 
 		return recv_buf;
@@ -74,5 +78,5 @@ boost::array<uint8_t, 1028> Camera_Connection::read(void)
 	{
 		std::cerr << e.what() << std::endl;
 	}
-	return recv_buf;
+//	return recv_buf;
 }
