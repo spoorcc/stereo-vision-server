@@ -8,15 +8,16 @@
 
 using namespace std;
 
-class Camera_Connection {
+class Client_Connection {
 
 public:
-	Camera_Connection(void); 
-	void connectToCamera(char*, int);
-	long sendPacket(Packet);
-	char* read(void);
+	Client_Connection(void); 
+	void connectToClient(char*, int);
+	int sendPacket(Packet);
+	void listenToClients(void);
 private:
-	SOCKET sconnect;
+	SOCKET sConnect;
+	SOCKET slisten;
 	SOCKADDR_IN addr;
 	int addrlen;
 	uint16_t readPos;

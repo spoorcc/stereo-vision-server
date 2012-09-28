@@ -71,6 +71,7 @@
   <ItemGroup>
     <ClCompile Include="camera_connection.cpp" />
     <ClCompile Include="camera_manager.cpp" />
+    <ClCompile Include="client_connection.cpp" />
     <ClCompile Include="client_manager.cpp" />
     <ClCompile Include="graphics_manager.cpp" />
     <ClCompile Include="main.cpp" />
@@ -79,6 +80,8 @@
   <ItemGroup>
     <ClInclude Include="camera_connection.h" />
     <ClInclude Include="camera_manager.h" />
+    <ClInclude Include="client_connection.h" />
+    <ClInclude Include="client_manager.h" />
     <ClInclude Include="includes.h" />
     <ClInclude Include="packet.h" />
   </ItemGroup>

@@ -1,4 +1,5 @@
 #include "includes.h"
+#include <Windows.h>
 
 using namespace std;
 using namespace boost; 
@@ -11,9 +12,12 @@ void main()
 
 	cout << "[Main Server] Main server started\n";
 
-    thread thread_1 = thread(startCameraManager);
-	thread thread_2 = thread(startGraphicsManager);
-	thread thread_3 = thread(startClientManager);
+   
+	//thread thread_2 = thread(startGraphicsManager);
+	//Sleep(1000);
+	//thread thread_3 = thread(startClientManager);
+	//Sleep(1000);
+	thread thread_1 = thread(startCameraManager);
 
 	for(;;)
 	{
