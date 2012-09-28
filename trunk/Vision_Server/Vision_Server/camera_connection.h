@@ -23,7 +23,7 @@ private:
 	uint16_t MsgSize;
 	long answer;
 
-	udp::socket socket;
+	//udp::socket socket;
 	//udp::socket socket();
 };
 

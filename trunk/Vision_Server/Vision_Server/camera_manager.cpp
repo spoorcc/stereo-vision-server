@@ -30,10 +30,10 @@ void startCameraManager(void)
 	connection = Camera_Connection();
 	//connection.connectToCamera(CAMERA_IP,CAMERA_PORT);
 	
-	  thread thread_receive = thread(receiveDataFromCamera);
-	  thread thread_makeImage = thread(maikeImage);
+	  //thread thread_receive = thread(receiveDataFromCamera);
+	 // thread thread_makeImage = thread(maikeImage);
 	  
-	//thread thread_send = thread(sendDataToCamera);
+	thread thread_send = thread(sendDataToCamera);
 }
 
 void receiveDataFromCamera(void)
@@ -45,14 +45,13 @@ void receiveDataFromCamera(void)
 	
 		if (bufferArray.at(0) == RAW_RGB_DATA)
 		{
-		uint16_t temp = (uint16_t) bufferArray.at(1);
-		uint16_t temp2 = (uint16_t) bufferArray.at(2);
-		uint32_t startPixel = ((temp2<<8) + temp) * 128;
-		printf("%d\n", startPixel);
-
+			uint16_t temp = (uint16_t) bufferArray.at(1);
+			uint16_t temp2 = (uint16_t) bufferArray.at(2);
+			uint32_t startPixel = ((temp2<<8) + temp) * 128;
+			printf("%d\n", startPixel);
 			for(int i = 0; i < 128; i++)
 			{
-			imageBuffer[startPixel + i ] =  bufferArray.at(4 + i * 8);                              
+				imageBuffer[startPixel + i] =  bufferArray.at(4 + i * 8);                              
 			}
 		}
 	}
@@ -63,7 +62,7 @@ void sendDataToCamera(void)
 {
 	//Test with Raw RGB
 	uint16_t range = 0;
-	for (int i = 0; i < 2400; i++)
+	for (int i = 0; i < 7200; i++)
 	{
 		range = i;
 		Packet packet = Packet();
@@ -73,7 +72,7 @@ void sendDataToCamera(void)
 			if(j % 3 == 0){
 				packet.addUint8(0x00);
 			}else if (j % 2 == 0){
-				packet.addUint8(0x0F);
+				packet.addUint8(0xFF);
 			}else{
 				packet.addUint8(0x00);
 			}
