@@ -63,25 +63,25 @@ void sendDataToCamera(void)
 {
 	//Test with Raw RGB
 	uint16_t range = 0;
-	for (int i = 0; i < 128; i++)
+	for (int i = 0; i < 2400; i++)
 	{
-		range = 128 * i;
+		range = i;
 		Packet packet = Packet();
 		packet.newPacket(RAW_RGB_DATA,range, READ);
 		for (int j = 0; j < 1024; j++)
 		{
 			if(j % 3 == 0){
-				packet.addUint8(0xFF);
+				packet.addUint8(0x00);
 			}else if (j % 2 == 0){
 				packet.addUint8(0x0F);
 			}else{
-				packet.addUint8(0xF0);
+				packet.addUint8(0x00);
 			}
 		}
-		printf((char*) packet.getBuffer());
+		//printf((char*) packet.getBuffer());
 		connection.sendPacket(packet);
-		string message;
-		cin >> message;
+		//string message;
+		//cin >> message;
 	}
 }
 
