@@ -12,8 +12,7 @@ class Camera_Connection {
 
 public:
 	Camera_Connection(void); 
-	void connectToCamera(char*, int);
-	long sendPacket(Packet);
+	void sendPacket(Packet);
 	char* read(void);
 private:
 	SOCKET sconnect;

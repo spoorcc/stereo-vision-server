@@ -2,7 +2,7 @@
 
 using namespace std;
 
-	typedef unsigned char     uint8_t;
+	//typedef unsigned char     uint8_t;
 
 // Create new packet with 1 byte header
 void Packet::newPacket(uint8_t _header, uint16_t _range, bool _read) {

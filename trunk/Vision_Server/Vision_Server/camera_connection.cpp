@@ -9,73 +9,59 @@ using boost::asio::ip::udp;
 Camera_Connection::Camera_Connection(void) {
 }
 
-void Camera_Connection::connectToCamera(char* cam_ip, int cam_port)
+void Camera_Connection::sendPacket(Packet packet)
 {
-	WSAData wsaData;
-    WORD DLLVersion;
-	DLLVersion = MAKEWORD(2,2);
-    answer = WSAStartup(DLLVersion, &wsaData);
-    if (answer != NO_ERROR) {
-      printf("WSAStartup failed: %d\n", answer);
-	  return;
-    }
+	boost::asio::io_service io_service;
+	boost::asio::ip::udp::socket socket(io_service);
+	boost::asio::ip::udp::endpoint remote_endpoint;
+	bool broadcast = true;
 
-	sconnect = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP); //AF_INET: IPv4, SOCK_DGRAM: UDP datagrams,  IPPROTO_UDP: UDP protocol
-	addr.sin_addr.s_addr = inet_addr(cam_ip);
-	addr.sin_family = AF_INET;
-	addr.sin_port = htons(cam_port);
+	socket.open(boost::asio::ip::udp::v4());
 
-	cout << "[Camera Manager] Establishing UDP connection to camera\n";
-	connect(sconnect, (SOCKADDR*)&addr, sizeof(addr));
+	// TO ENABLE BROADCAST
+	if(broadcast)
+	{
+		boost::asio::socket_base::broadcast option(true);
+		socket.set_option(option);
+	}
+   
+	remote_endpoint = boost::asio::ip::udp::endpoint(
+    boost::asio::ip::address::from_string("127.0.0.1"),  51912);
+    
+	boost::system::error_code ignored_error;
 
-}
+	std::cout << "Send to " << remote_endpoint << std::endl;
 
-long Camera_Connection::sendPacket(Packet packet)
-{
+	//Verzenden
 
-	//printf((char *) packet.getBuffer());
-	//packet.SetHeader();
-	//answer = send(sconnect,(char*) packet.getBuffer(), 7 ,NULL);
-	answer = send(sconnect,"bericht", 7 ,NULL);
-	return answer;
+	socket.send_to(boost::asio::buffer(packet.getBuffer(), 50), remote_endpoint, 0, ignored_error);
 }
 
 char* Camera_Connection::read()
 {
-  try
-  {
+	try
+	{
+		boost::asio::io_service io_service;
 
-    boost::asio::io_service io_service;
-
-    udp::endpoint local_endpoint = boost::asio::ip::udp::endpoint(
-	  boost::asio::ip::address::from_string("127.0.0.1"), 51912);
-    std::cout << "Local bind " << local_endpoint << std::endl;
+		udp::endpoint local_endpoint = boost::asio::ip::udp::endpoint(
+			boost::asio::ip::address::from_string("127.0.0.1"), 51912);
+		std::cout << "Local bind " << local_endpoint << std::endl;
  
-// MODE 1: WORKS  
-//    udp::socket socket(io_service, local_endpoint);
+		udp::socket socket(io_service);
+		socket.open(udp::v4());
+		socket.bind(local_endpoint);
 
-// MODE 2: WORKS
-//    udp::socket socket(io_service, udp::endpoint(udp::v4(), boost::lexical_cast<int>(argv[2]) )),
+		boost::array<char, 1027> recv_buf;
+		udp::endpoint sender_endpoint;
+		for(;;){
+			size_t len = socket.receive_from(boost::asio::buffer(recv_buf), sender_endpoint);
 
-// MODE 3: WORKS
-    udp::socket socket(io_service);
-    socket.open(udp::v4());
-    socket.bind(local_endpoint);
-///////////////
-	boost::array<char, 1027> recv_buf;
-	udp::endpoint sender_endpoint;
-	for(;;){
-
-		size_t len = socket.receive_from(boost::asio::buffer(recv_buf), sender_endpoint);
-
-		std::cout.write(recv_buf.data(), len);
+			std::cout.write(recv_buf.data(), len);
+		}
 	}
-  }
-  catch (std::exception& e)
-  {
-    std::cerr << e.what() << std::endl;
-  }
-
-
-  return "test";
+	catch (std::exception& e)
+	{
+		std::cerr << e.what() << std::endl;
+	}
+	  return "test";
 }
