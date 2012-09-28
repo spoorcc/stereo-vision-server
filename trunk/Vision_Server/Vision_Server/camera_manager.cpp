@@ -28,15 +28,23 @@ void startCameraManager(void)
 	connection = Camera_Connection();
 	//connection.connectToCamera(CAMERA_IP,CAMERA_PORT);
 	
-	thread thread_receive = thread(receiveDataFromCamera);
-	//thread thread_send = thread(sendDataToCamera);
+	//thread thread_receive = thread(receiveDataFromCamera);
+	thread thread_send = thread(sendDataToCamera);
 }
 
 void receiveDataFromCamera(void)
 {
 	printf("[Camera Manager] start reading\n");
+
+	for(;;){
+		boost::array<uint8_t, 1028> bufferArray = connection.read();
 	
-	connection.read();
+		if (bufferArray.at(0) == RAW_RGB_DATA)
+		{
+
+		}
+	}
+
 }
 
 void sendDataToCamera(void)
@@ -45,14 +53,22 @@ void sendDataToCamera(void)
 	uint16_t range = 0;
 	for (int i = 0; i < 128; i++)
 	{
-		Sleep(1000);
 		range = 128 * i;
-		Packet packet = Packet(RAW_RGB_DATA,range, READ);
-		//for (int j = 0; j < 1024; j++)
-		//{
-		//	packet.addUint8();
-		//}
+		Packet packet = Packet();
+		packet.newPacket(RAW_RGB_DATA,range, READ);
+		for (int j = 0; j < 1100; j++)
+		{
+			if(j % 3 == 0){
+				packet.addUint8(0xFF);
+			}else if (j % 2 == 0){
+				packet.addUint8(0x0F);
+			}else{
+				packet.addUint8(0xF0);
+			}
+		}
 		printf((char*) packet.getBuffer());
 		connection.sendPacket(packet);
+		string message;
+		cin >> message;
 	}
 }
