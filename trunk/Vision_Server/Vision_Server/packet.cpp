@@ -18,9 +18,9 @@ void Packet::newPacket(uint8_t _header, uint16_t _range, bool _read) {
 	}
 }
 
-Packet::Packet(uint8_t _header, uint16_t _range, bool _read)
+Packet::Packet()
 {
-	newPacket(_header, _range, _read);
+	
 }
 
 void Packet::reset(void) {

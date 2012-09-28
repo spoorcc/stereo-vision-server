@@ -1,6 +1,6 @@
 #include "camera_connection.h"
-#include <boost/array.hpp>
-#include <boost/asio.hpp>
+//#include <boost/array.hpp>
+//#include <boost/asio.hpp>
 
 using namespace std;
 using boost::asio::ip::udp;
@@ -37,31 +37,42 @@ void Camera_Connection::sendPacket(Packet packet)
 	socket.send_to(boost::asio::buffer(packet.getBuffer(), 50), remote_endpoint, 0, ignored_error);
 }
 
-char* Camera_Connection::read()
+void setReadConnection(void)
 {
 	try
 	{
-		boost::asio::io_service io_service;
-
-		udp::endpoint local_endpoint = boost::asio::ip::udp::endpoint(
-			boost::asio::ip::address::from_string("192.168.1.116"), 51912);
+		udp::endpoint local_endpoint = boost::asio::ip::udp::endpoint(boost::asio::ip::address::from_string("192.168.1.116"), 51912);
 		std::cout << "Local bind " << local_endpoint << std::endl;
  
-		udp::socket socket(io_service);
+		boost::asio::io_service read_io_service;
+		udp::socket socket(read_io_service);
 		socket.open(udp::v4());
 		socket.bind(local_endpoint);
-
-		boost::array<char, 1027> recv_buf;
-		udp::endpoint sender_endpoint;
-		for(;;){
-			size_t len = socket.receive_from(boost::asio::buffer(recv_buf), sender_endpoint);
-
-			std::cout.write(recv_buf.data(), len);
-		}
 	}
 	catch (std::exception& e)
 	{
 		std::cerr << e.what() << std::endl;
 	}
-	  return "test";
+
+}
+
+boost::array<uint8_t, 1028> Camera_Connection::read(void)
+{
+	boost::array<uint8_t, 1028> recv_buf;
+	try
+	{
+		udp::endpoint local_endpoint = boost::asio::ip::udp::endpoint(boost::asio::ip::address::from_string("192.168.1.116"), 51912);
+		boost::asio::io_service read_io_service;
+		udp::socket socket(read_io_service);
+		socket.open(udp::v4());
+		socket.bind(local_endpoint);
+		size_t len = socket.receive_from(boost::asio::buffer(recv_buf), sender_endpoint);
+
+		return recv_buf;
+	}
+	catch (std::exception& e)
+	{
+		std::cerr << e.what() << std::endl;
+	}
+	return recv_buf;
 }
