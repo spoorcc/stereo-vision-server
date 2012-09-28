@@ -29,10 +29,7 @@ void startCameraManager(void)
 	//connection.connectToCamera(CAMERA_IP,CAMERA_PORT);
 	
 	thread thread_receive = thread(receiveDataFromCamera);
-	thread thread_send = thread(sendDataToCamera);
-	
-
-	
+	//thread thread_send = thread(sendDataToCamera);
 }
 
 void receiveDataFromCamera(void)
@@ -51,14 +48,11 @@ void sendDataToCamera(void)
 		Sleep(1000);
 		range = 128 * i;
 		Packet packet = Packet(RAW_RGB_DATA,range, READ);
+		//for (int j = 0; j < 1024; j++)
+		//{
+		//	packet.addUint8();
+		//}
+		printf((char*) packet.getBuffer());
 		connection.sendPacket(packet);
-		/*if(sent == -1)
-		{
-			printf("[ERROR][Camera Manager] error!\n");
-		}
-		else
-		{
-			printf("[Camera Manager] Sent %d bytes\n", sent);
-		}*/
 	}
 }

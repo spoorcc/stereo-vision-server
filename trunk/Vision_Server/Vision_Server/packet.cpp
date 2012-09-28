@@ -10,6 +10,7 @@ void Packet::newPacket(uint8_t _header, uint16_t _range, bool _read) {
 	addUint8(_header);
 	addUint16(_range);
 	if(_read){
+		//Read
 		addUint8(0x00);
 	}else{
 		//Write
@@ -28,7 +29,7 @@ void Packet::reset(void) {
 }
 
 bool Packet::canAdd(int _size) {
-	return (_size+readPos < PACKET_MAXSIZE-16);
+	return (_size+readPos < PACKET_MAXSIZE);
 }
 
 uint8_t* Packet::getBuffer(void) {

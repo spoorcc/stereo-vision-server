@@ -26,7 +26,7 @@ void Camera_Connection::sendPacket(Packet packet)
 	}
    
 	remote_endpoint = boost::asio::ip::udp::endpoint(
-    boost::asio::ip::address::from_string("127.0.0.1"),  51912);
+    boost::asio::ip::address::from_string("192.168.1.109"),  51912);
     
 	boost::system::error_code ignored_error;
 
@@ -44,7 +44,7 @@ char* Camera_Connection::read()
 		boost::asio::io_service io_service;
 
 		udp::endpoint local_endpoint = boost::asio::ip::udp::endpoint(
-			boost::asio::ip::address::from_string("127.0.0.1"), 51912);
+			boost::asio::ip::address::from_string("192.168.1.116"), 51912);
 		std::cout << "Local bind " << local_endpoint << std::endl;
  
 		udp::socket socket(io_service);
