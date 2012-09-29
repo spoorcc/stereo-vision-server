@@ -18,50 +18,58 @@ using namespace std;
 #define READ				true
 #define WRITE				false
 
-using namespace boost; 
-
-uint8_t imageBuffer[307200];
+uint8_t imageBuffer[921600];
 
 void startCameraManager(void)
 {
 	cout << "[Camera Manager] Camera Manager started\n";
-
 	//The camera manager act as a client, since the FPGA is just bouncing information back.
-	connection = Camera_Connection();
+
 	//connection.connectToCamera(CAMERA_IP,CAMERA_PORT);
 	
-	  //thread thread_receive = thread(receiveDataFromCamera);
-	 // thread thread_makeImage = thread(maikeImage);
+	thread thread_receive = thread(receiveDataFromCamera);
+	thread thread_makeImage = thread(maikeImage);
 	  
 	thread thread_send = thread(sendDataToCamera);
 }
 
 void receiveDataFromCamera(void)
 {
-	printf("[Camera Manager] start reading\n");
+	printf("[Camera Manager] start reading data\n");
 
+	Camera_Connection connection(io_service);
+
+	//First buffer array should be read;
 	for(;;){
 		boost::array<uint8_t, 1028> bufferArray = connection.read();
-	
 		if (bufferArray.at(0) == RAW_RGB_DATA)
 		{
 			uint16_t temp = (uint16_t) bufferArray.at(1);
 			uint16_t temp2 = (uint16_t) bufferArray.at(2);
-			uint32_t startPixel = ((temp2<<8) + temp) * 128;
-			printf("%d\n", startPixel);
+		
+			uint32_t tempStartPixel = ((temp2<<8) + temp) * 128;
+			//printf("%d\n", tempStartPixel);
 			for(int i = 0; i < 128; i++)
 			{
-				imageBuffer[startPixel + i] =  bufferArray.at(4 + i * 8);                              
+				imageBuffer[tempStartPixel + i] =  bufferArray.at(4 + i * 8); 
 			}
 		}
 	}
+}
+
+void calculateImageData(boost::array<uint8_t, 1028> bufferArray)
+{
 
 }
 
 void sendDataToCamera(void)
 {
+	printf("[Camera Manager] start sending data\n");
 	//Test with Raw RGB
 	uint16_t range = 0;
+
+	Camera_Connection connection(io_service);
+
 	for (int i = 0; i < 7200; i++)
 	{
 		range = i;
