@@ -14,7 +14,7 @@ void sendDataToCamera(void);
 void connectToCamera(void);
 void maikeImage(void);
 
-void calculateImageData(boost::array<uint8_t, 1028>);
+void calculateMessagesPerSecond(void);
 
 
 
