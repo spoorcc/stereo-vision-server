@@ -82,28 +82,33 @@ void sendDataToCamera(void)
 
 	Camera_Connection connection(io_service, false);
 	Packet packet = Packet();
+
+	range = 0;
+
+	packet.newPacket(RAW_RGB_DATA,range, READ);
+	for (int j = 0; j < 1024; j++)
+	{
+		if(j % 3 == 0){
+			packet.addUint8(0x00);
+		}else if (j % 2 == 0){
+			packet.addUint8(0xFF);
+		}else{
+			packet.addUint8(0x00);
+		}
+	}
+
 	for(;;)
 	{
-		for(int i = 0; i < 7200; i++)
-		{
-			range = i;
-			packet.reset();
-			packet.newPacket(RAW_RGB_DATA,range, READ);
-			for (int j = 0; j < 1024; j++)
-			{
-				if(j % 3 == 0){
-					packet.addUint8(0x00);
-				}else if (j % 2 == 0){
-					packet.addUint8(0xFF);
-				}else{
-					packet.addUint8(0x00);
-				}
-			}
-			connection.sendPacket(packet);
-			messagesSentCount++;
-
-			//boost::this_thread::sleep(boost::posix_time::microseconds(10));//Sleep for img process
+		range++;
+		if(range >= 7200){
+			range = 0;
 		}
+		//packet.changeAllHeaders(RAW_RGB_DATA, range, READ);
+		packet.changeRange(range);
+		connection.sendPacket(packet);
+		messagesSentCount++;
+
+		//boost::this_thread::sleep(boost::posix_time::microseconds(10));//Sleep for img process?
 	}
 }
 

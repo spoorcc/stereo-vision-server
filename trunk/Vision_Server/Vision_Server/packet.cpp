@@ -2,7 +2,7 @@
 
 using namespace std;
 
-	//typedef unsigned char     uint8_t;
+//typedef unsigned char     uint8_t;
 
 // Create new packet with 1 byte header
 void Packet::newPacket(uint8_t _header, uint16_t _range, bool _read) {
@@ -16,6 +16,30 @@ void Packet::newPacket(uint8_t _header, uint16_t _range, bool _read) {
 		//Write
 		addUint8(0x10);
 	}
+}
+
+void Packet::changeAllHeaders(uint8_t _header, uint16_t _range, bool _read){
+	//Header
+	Buffer[0] = _header;
+
+	//Range
+	Buffer[1] = uint8_t(_range);
+	Buffer[2] = uint8_t(_range >> 8);
+
+	if(_read){
+		//Read
+		Buffer[3] = 0x00;
+	}else{
+		//Write
+		Buffer[3] = 0x10;
+	}
+}
+
+void Packet::changeRange(uint16_t _range)
+{
+	//Range
+	Buffer[1] = uint8_t(_range);
+	Buffer[2] = uint8_t(_range >> 8);
 }
 
 Packet::Packet()

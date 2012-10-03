@@ -7,7 +7,6 @@
 class Packet {
 public:
 	static const int PACKET_MAXSIZE = 1027;
-
 	Packet(void);
 	void newPacket(uint8_t,uint16_t, bool); 
 	uint8_t* getBuffer(void);
@@ -18,6 +17,8 @@ public:
 	uint16_t readUint16(void);
 	bool addUint8(uint8_t);		
 	bool addUint16(uint16_t);
+	void Packet::changeAllHeaders(uint8_t, uint16_t, bool);
+	void Packet::changeRange(uint16_t);
 private:
 	uint16_t readPos;
 	uint16_t MsgSize;
