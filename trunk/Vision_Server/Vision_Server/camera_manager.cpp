@@ -1,5 +1,6 @@
 #include "includes.h"
 #include "camera_manager.h"
+#include "packetReceiver.h""
 
 using namespace std;
 
@@ -18,9 +19,9 @@ using namespace std;
 #define READ				true
 #define WRITE				false
 
-uint8_t imageBuffer[921600];
 uint32_t messagesReceivedCount = 0;
 uint32_t messagesSentCount = 0;
+
 
 void startCameraManager(void)
 {
@@ -29,7 +30,7 @@ void startCameraManager(void)
 	thread thread_msg_per_sec = thread(calculateMessagesPerSecond);
 
 	thread thread_receive = thread(receiveDataFromCamera);
-	thread thread_makeImage = thread(maikeImage);
+	thread thread_showImage = thread(showImage);
 	
 	thread thread_send = thread(sendDataToCamera);
 
@@ -53,21 +54,38 @@ void receiveDataFromCamera(void)
 	Camera_Connection connection(io_service, true);
 	
 	//Creating the buffer before the loop, otherwise it takes extremely much processing time
-	boost::array<uint8_t, 1028> bufferArray = {};
+	boost::array<uint8_t, 260> bufferArray = {};
 
 	for(;;){
 		bufferArray = connection.read();
 		messagesReceivedCount++;
-		if (bufferArray.at(0) == RAW_RGB_DATA)
-		{
-			uint16_t temp = (uint16_t) bufferArray.at(1);
-			uint16_t temp2 = (uint16_t) bufferArray.at(2);
-		
-			uint32_t tempStartPixel = ((temp2<<8) + temp) * 128;
-			for(int i = 0; i < 128; i++)
-			{
-				imageBuffer[tempStartPixel + i] = bufferArray.at(4 + i * 8); 
-			}
+
+		switch ( bufferArray.at(0) ) {
+		case CAM_CONFIG : 
+			//;
+        break;
+		case PROCES_CONFIG : 
+			//;
+        break;
+		case CALLIB_DATA : 
+			//;
+        break;
+		case RAW_RGB_DATA : 
+			//;
+        break;
+		case FILLED_UP_DATA : 
+			filled_up_data(bufferArray);
+        break;
+		case EQUALIZED_DATA : 
+			//;
+        break;
+		case RECTIFIED_DATA : 
+			//;
+        break;
+		case CORRESPONDENCE : 
+			//;
+		default : 
+		break;
 		}
 	}
 }
@@ -85,22 +103,27 @@ void sendDataToCamera(void)
 
 	range = 0;
 
-	packet.newPacket(RAW_RGB_DATA, range, READ);
-	for (int j = 0; j < 3000; j++)
+	packet.newPacket(FILLED_UP_DATA, range, READ);
+	for (int j = 0; j < 32; j++)
 	{
-		if(j % 3 == 0){
-			packet.addUint8(0x0F);
-		}else if (j % 2 == 0){
-			packet.addUint8(0x59);
-		}else{
-			packet.addUint8(0xFF);
+		if(j % 4 == 0){
+			packet.addUint8(0x3f);
+		}
+		else if (j % 3 == 0){
+			packet.addUint8(0xf3);
+		}
+		else if (j % 2 == 0){
+			packet.addUint8(0xf3);
+		}
+		else{
+			packet.addUint8(0x4);
 		}
 	}
 
 	for(;;)
 	{
 		range++;
-		if(range >= 7200){
+		if(range >= 28800){
 			range = 0;
 		}
 		//packet.changeAllHeaders(RAW_RGB_DATA, range, READ);
@@ -113,21 +136,16 @@ void sendDataToCamera(void)
 	}
 }
 
-void maikeImage(void)
+void showImage(void)
 {
-	for(;;)
-	{
+	for(;;){
 		string msg;
 		cin >> msg;
-		IplImage* imgTest = cvCreateImage(cvSize(640, 480), IPL_DEPTH_8U, 3);
-        for (int i = 0; i < 921600; i++)
-        {
-			imgTest->imageData[i] = imageBuffer[i];
-        }
-        cvNamedWindow( "Example1", CV_WINDOW_AUTOSIZE );
-        cvShowImage("Example1", imgTest);
-        cvWaitKey(0);
-        cvReleaseImage( &imgTest );
-        cvDestroyWindow("Example1");
+		if(msg == "1"){
+		maikeImage(imageBuffer_cam1);
+		}
+		else{
+		maikeImage(imageBuffer_cam2);
+		}
 	}
 }

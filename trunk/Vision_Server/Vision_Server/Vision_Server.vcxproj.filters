@@ -36,6 +36,9 @@
     <ClCompile Include="client_connection.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="packetReceiver.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="includes.h">
@@ -54,6 +57,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="client_manager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="packetReceiver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

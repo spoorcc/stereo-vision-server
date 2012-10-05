@@ -15,7 +15,7 @@ class Camera_Connection {
 public:
 	Camera_Connection(boost::asio::io_service&, bool); 
 	void sendPacket(Packet&);
-	boost::array<uint8_t, 1028> read();
+	boost::array<uint8_t, 260> read();
 	void setReadConnection(void);
 private:
 	uint16_t readPos;

@@ -12,7 +12,7 @@ boost::asio::io_service io_service;
 void receiveDataFromCamera(void);
 void sendDataToCamera(void);
 void connectToCamera(void);
-void maikeImage(void);
+void showImage(void);
 
 void calculateMessagesPerSecond(void);
 

@@ -76,6 +76,7 @@
     <ClCompile Include="graphics_manager.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="packet.cpp" />
+    <ClCompile Include="packetReceiver.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="camera_connection.h" />
@@ -84,6 +85,7 @@
     <ClInclude Include="client_manager.h" />
     <ClInclude Include="includes.h" />
     <ClInclude Include="packet.h" />
+    <ClInclude Include="packetReceiver.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

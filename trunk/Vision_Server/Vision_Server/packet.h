@@ -6,7 +6,7 @@
 
 class Packet {
 public:
-	static const int PACKET_MAXSIZE = 1027;
+	static const int PACKET_MAXSIZE = 260;
 	Packet(void);
 	void newPacket(uint8_t,uint16_t, bool); 
 	uint8_t* getBuffer(void);

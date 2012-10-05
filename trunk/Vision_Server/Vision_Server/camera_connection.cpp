@@ -35,12 +35,12 @@ void Camera_Connection::sendPacket(Packet& packet)
 {
 	//Verzenden
 	//std::cout << "Send to " << remote_endpoint << std::endl;
-	socket_.send_to(boost::asio::buffer(packet.getBuffer(), 1028), remote_endpoint, 0, ignored_error);
+	socket_.send_to(boost::asio::buffer(packet.getBuffer(), 260), remote_endpoint, 0, ignored_error);
 }
 
-boost::array<uint8_t, 1028> Camera_Connection::read(void)
+boost::array<uint8_t, 260> Camera_Connection::read(void)
 {
-	boost::array<uint8_t, 1028> recv_buf;
+	boost::array<uint8_t, 260> recv_buf;
 	try
 	{
 		udp::endpoint sender_endpoint;
