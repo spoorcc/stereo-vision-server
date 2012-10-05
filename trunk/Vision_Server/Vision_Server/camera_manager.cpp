@@ -86,7 +86,7 @@ void sendDataToCamera(void)
 	range = 0;
 
 	packet.newPacket(RAW_RGB_DATA, range, READ);
-	for (int j = 0; j < 1024; j++)
+	for (int j = 0; j < 3000; j++)
 	{
 		if(j % 3 == 0){
 			packet.addUint8(0x0F);
