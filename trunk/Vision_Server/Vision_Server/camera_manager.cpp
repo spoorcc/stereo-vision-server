@@ -66,7 +66,7 @@ void receiveDataFromCamera(void)
 			uint32_t tempStartPixel = ((temp2<<8) + temp) * 128;
 			for(int i = 0; i < 128; i++)
 			{
-				imageBuffer[tempStartPixel + i] =  bufferArray.at(4 + i * 8); 
+				imageBuffer[tempStartPixel + i] = bufferArray.at(4 + i * 8); 
 			}
 		}
 	}
@@ -85,13 +85,13 @@ void sendDataToCamera(void)
 
 	range = 0;
 
-	packet.newPacket(RAW_RGB_DATA,range, READ);
+	packet.newPacket(RAW_RGB_DATA, range, READ);
 	for (int j = 0; j < 1024; j++)
 	{
 		if(j % 3 == 0){
 			packet.addUint8(0x0F);
 		}else if (j % 2 == 0){
-			packet.addUint8(0x00);
+			packet.addUint8(0x59);
 		}else{
 			packet.addUint8(0xFF);
 		}
@@ -108,7 +108,8 @@ void sendDataToCamera(void)
 		connection.sendPacket(packet);
 		messagesSentCount++;
 
-		//boost::this_thread::sleep(boost::posix_time::microseconds(10));//Sleep for img process?
+		//boost::this_thread::sleep(boost::posix_time::microseconds(0));//Sleep for img process?
+		//boost::sle
 	}
 }
 

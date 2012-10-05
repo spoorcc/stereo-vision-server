@@ -14,7 +14,7 @@ using boost::asio::ip::udp;
 class Camera_Connection {
 public:
 	Camera_Connection(boost::asio::io_service&, bool); 
-	void sendPacket(Packet);
+	void sendPacket(Packet&);
 	boost::array<uint8_t, 1028> read();
 	void setReadConnection(void);
 private:

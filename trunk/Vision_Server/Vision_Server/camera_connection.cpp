@@ -31,7 +31,7 @@ Camera_Connection::Camera_Connection(boost::asio::io_service& io_service, bool l
 	}
 }
 
-void Camera_Connection::sendPacket(Packet packet)
+void Camera_Connection::sendPacket(Packet& packet)
 {
 	//Verzenden
 	//std::cout << "Send to " << remote_endpoint << std::endl;
