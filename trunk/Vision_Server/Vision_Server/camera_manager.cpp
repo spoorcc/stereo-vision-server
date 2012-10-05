@@ -89,11 +89,11 @@ void sendDataToCamera(void)
 	for (int j = 0; j < 1024; j++)
 	{
 		if(j % 3 == 0){
-			packet.addUint8(0x00);
+			packet.addUint8(0x0F);
 		}else if (j % 2 == 0){
-			packet.addUint8(0xFF);
-		}else{
 			packet.addUint8(0x00);
+		}else{
+			packet.addUint8(0xFF);
 		}
 	}
 
@@ -119,7 +119,7 @@ void maikeImage(void)
 		string msg;
 		cin >> msg;
 		IplImage* imgTest = cvCreateImage(cvSize(640, 480), IPL_DEPTH_8U, 3);
-        for (int i = 0; i < 307200; i++)
+        for (int i = 0; i < 921600; i++)
         {
 			imgTest->imageData[i] = imageBuffer[i];
         }
