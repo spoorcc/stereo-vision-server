@@ -5,10 +5,10 @@
 using namespace std;
 using boost::asio::ip::udp;
 
-#define Cam_ip "127.0.0.1"
+#define Cam_ip "169.254.255.255"
 #define Cam_port 51912
 
-#define Local_ip "127.0.0.1"
+#define Local_ip "169.254.184.112"
 
 Camera_Connection::Camera_Connection(boost::asio::io_service& io_service, bool listen) : socket_(io_service) {
 	try{

@@ -4,9 +4,6 @@
 
 using namespace std;
 
-#define CAMERA_IP "127.0.0.1"	//ip address of udp server
-#define CAMERA_PORT 51912			//The port on which to listen for incoming data
-
 //Constants
 #define CAM_CONFIG		 0x80
 #define PROCES_CONFIG	 0x90
@@ -33,8 +30,6 @@ void startCameraManager(void)
 	thread thread_showImage = thread(showImage);
 	
 	thread thread_send = thread(sendDataToCamera);
-
-
 }
 
 void calculateMessagesPerSecond(void)
@@ -103,11 +98,20 @@ void sendDataToCamera(void)
 
 	range = 0;
 
-	packet.newPacket(FILLED_UP_DATA, range, READ);
+	//packet.newPacket(FILLED_UP_DATA, range, READ);
+	packet.newPacket(0x00, 0x0000, READ);
 	for (int j = 0; j < 32; j++)
 	{
-		if(j % 4 == 0){
-			packet.addUint8(0x3f);
+		packet.addUint8(0x00);
+	//	packet.addUint8(0x00);
+	//	packet.addUint8(0x00);
+	//	packet.addUint8(0x00);
+	//	packet.addUint8(0x00);
+	//	packet.addUint8(0x00);
+	//	packet.addUint8(0x00);
+	//	packet.addUint8(0x22);
+		/*if(j % 4 == 0){
+			packet.addUint8(0xff);
 		}
 		else if (j % 3 == 0){
 			packet.addUint8(0xf3);
@@ -117,22 +121,22 @@ void sendDataToCamera(void)
 		}
 		else{
 			packet.addUint8(0x4);
-		}
+		}*/
 	}
 
 	for(;;)
 	{
 		range++;
-		if(range >= 28800){
-			range = 0;
+		if(range >= 1){
+			range = 1;
 		}
 		//packet.changeAllHeaders(RAW_RGB_DATA, range, READ);
-		packet.changeRange(range);
+		// packet.changeRange(range);
 		connection.sendPacket(packet);
 		messagesSentCount++;
 
 		//boost::this_thread::sleep(boost::posix_time::microseconds(0));//Sleep for img process?
-		//boost::sle
+		boost::this_thread::sleep(boost::posix_time::milliseconds(100));
 	}
 }
 
