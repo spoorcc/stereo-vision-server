@@ -11,10 +11,10 @@ void Packet::newPacket(uint8_t _header, uint16_t _range, bool _read) {
 	addUint16(_range);
 	if(_read){
 		//Read
-		addUint8(0x00);
+		addUint8(0x0);
 	}else{
 		//Write
-		addUint8(0x10);
+		addUint8(0x1);
 	}
 }
 
