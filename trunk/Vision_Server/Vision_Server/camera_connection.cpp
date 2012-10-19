@@ -8,7 +8,7 @@ using boost::asio::ip::udp;
 #define Cam_ip  "224.0.0.251" //"192.168.123.4" 
 #define Cam_port 49679
 
-#define Local_ip "127.0.0.1"
+#define Local_ip "169.254.184.112"
 
 
 Camera_Connection::Camera_Connection(boost::asio::io_service& io_service, bool listen) : socket_(io_service) {
@@ -22,7 +22,8 @@ Camera_Connection::Camera_Connection(boost::asio::io_service& io_service, bool l
 
 		//open retreive socket
 		if(listen){
-			udp::endpoint local_endpoint = udp::endpoint(boost::asio::ip::address::from_string(Local_ip), Cam_port);
+			//udp::endpoint local_endpoint = udp::endpoint(boost::asio::ip::address::from_string(Local_ip), Cam_port);
+			udp::endpoint local_endpoint = udp::endpoint(boost::asio::ip::address_v4::any(), Cam_port);
 			socket_.bind(local_endpoint);
 		}
 	}

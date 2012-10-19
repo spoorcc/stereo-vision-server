@@ -23,12 +23,11 @@ uint32_t messagesSentCount = 0;
 void startCameraManager(void)
 {
 	cout << "[Camera Manager] Camera Manager started\n";
-	//The camera manager act as a client, since the FPGA is just bouncing information back.
+//The camera manager act as a client, since the FPGA is just bouncing information back.
 	thread thread_msg_per_sec = thread(calculateMessagesPerSecond);
 
 	thread thread_receive = thread(receiveDataFromCamera);
 	thread thread_showImage = thread(showImage);
-	
 	thread thread_send = thread(sendDataToCamera);
 }
 
