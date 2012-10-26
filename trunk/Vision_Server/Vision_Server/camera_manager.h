@@ -1,14 +1,13 @@
 #pragma comment(lib, "Ws2_32.lib")
-#include "client_connection.h"
+#include "camera_connection.h"
+#include "highgui.h"
+#include <cv.h>
 
 using namespace boost; 
 
-Client_Connection connection(boost::asio::io_service&);
+void receiveDataFromCamera(void);
+void sendDataToCamera(void);
+void connectToCamera(void);
+void showImage(void);
 
-boost::asio::io_service client_io_service;
-
-void startClientManager(void);
-void receiveDataFromClient(void);
-void sendDataToClient(void);
-
-void calculateClientMessagesPerSecond(void);
+void calculateMessagesPerSecond(void);
