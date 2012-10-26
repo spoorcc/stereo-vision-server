@@ -3,17 +3,74 @@
 
 using namespace std;
 
-#define CAMERA_IP "127.0.0.1"	//ip address of udp server
-#define CAMERA_PORT 51912			//The port on which to listen for incoming data
+uint32_t messagesClientReceivedCount = 0;
+uint32_t messagesClientSentCount = 0;
 
 void startClientManager(void)
 {
 	//TODO
 	cout << "[Client Manager] Client Manager started\n";
-	connection = Client_Connection();
-	connection.connectToClient(CAMERA_IP,CAMERA_PORT);
-	connection.listenToClients();
+	
+	thread thread_receive = thread(receiveDataFromClient);
+	//thread thread_send = thread(sendDataToClient);
+	thread thread_calc = thread(calculateClientMessagesPerSecond);
+}
+
+void calculateClientMessagesPerSecond(void)
+{
+	for(;;){
+		boost::this_thread::sleep(boost::posix_time::milliseconds(1000));
+		printf("Messages sent: %d/sec, received: %d/sec \n", messagesClientSentCount, messagesClientReceivedCount);
+		messagesClientSentCount = 0;
+		messagesClientReceivedCount = 0;
+	}
+}
+
+void sendDataToClient(void)
+{
+	printf("[Client Manager] start sending data\n");
+	
+	/////////////////////////////////////////////////////////////
+	//Test with Raw RGB
+	uint16_t range = 0;
+
+	Client_Connection connection(client_io_service, false);
+	Packet packet = Packet();
+
+	range = 0;
+
+	//packet.newPacket(FILLED_UP_DATA, range, READ);
+	packet.newPacket(0x00, 0x0000, true);
+	for (int j = 0; j < 32; j++)
+	{
+		packet.addUint8(0x00);
+	}
+
 	for(;;)
 	{
+		range++;
+		if(range >= 1){
+			range = 1;
+		}
+
+		connection.sendPacket(packet);
+		messagesClientSentCount++;
+
+		boost::this_thread::sleep(boost::posix_time::milliseconds(100));
+	}
+}
+
+void receiveDataFromClient(void)
+{
+	printf("[Client Manager] start reading data\n");
+
+	Client_Connection connection(client_io_service, true);
+	
+	//Creating the buffer before the loop, otherwise it takes extremely much processing time
+	boost::array<uint8_t, 260> bufferArray = {};
+	for(;;){
+		bufferArray = connection.read();
+		//connection
+		
 	}
 }

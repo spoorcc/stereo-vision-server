@@ -3,25 +3,27 @@
 #include <stdint.h>
 #include <iostream>
 #include <WinSock2.h>
+#include <boost/array.hpp>
+#include <boost/asio.hpp>
 
 #include "packet.h"
 
 using namespace std;
+using boost::asio::ip::udp;
 
 class Client_Connection {
-
 public:
-	Client_Connection(void); 
-	void connectToClient(char*, int);
-	int sendPacket(Packet);
-	void listenToClients(void);
+	Client_Connection(boost::asio::io_service&, bool); 
+	void sendPacket(Packet&);
+	boost::array<uint8_t, 260> read();
+	void setReadConnection(void);
 private:
-	SOCKET sConnect;
-	SOCKET slisten;
-	SOCKADDR_IN addr;
-	int addrlen;
 	uint16_t readPos;
 	uint16_t MsgSize;
 	long answer;
+	udp::endpoint local_endpoint;
+	udp::socket socket_;
+	udp::endpoint remote_endpoint;
+	boost::system::error_code ignored_error;
 };
 
