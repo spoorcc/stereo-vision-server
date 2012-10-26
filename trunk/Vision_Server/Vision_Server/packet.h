@@ -6,7 +6,7 @@
 
 class Packet {
 public:
-	static const int Packet::PACKET_MAXSIZE = 297;
+	static const int Packet::PACKET_MAXSIZE = 1500;
 	Packet::Packet(void);
 	void Packet::newPacket(void); 
 	uint8_t* Packet::getBuffer(void);
@@ -19,6 +19,7 @@ public:
 	bool Packet::addUint16(uint16_t);
 	void Packet::changeAllHeaders(uint8_t, uint16_t, bool);
 	void Packet::changeRange(uint16_t);
+	void Packet::setPacketLength(void);
 private:
 	uint16_t Packet::readPos;
 	uint16_t Packet::MsgSize;

@@ -69,28 +69,33 @@ int Camera_Connection::chooseEthernetCard(void){
 		fprintf(stderr,"\verbinding is klaar\n");
 }
 
-
 void Camera_Connection::sendPacket(Packet& packet){
-
-		pcap_sendpacket(	fp, // the adapter handle
+		pcap_sendpacket
+							(	fp, // the adapter handle
 							packet.getBuffer(), // the packet
 							packet.getMsgSize() // the length of the packet
 							);
 }
 
-void Camera_Connection::receivePacket(void){
 
-	while((res = pcap_next_ex( fp, &header, &pkt_data)) >= 0){
+bool Camera_Connection::receivePacket(void){
 
-		if(res == 0)
-           /* Timeout elapsed */
-         continue;
+//	while((res = pcap_next_ex( fp, &header, &pkt_data)) >= 0){
 
-		printf("Destination MAC\n");
-		for(int i = 0; i < 6; i++){
-			printf("%.2x ", pkt_data[i]);
+	if((res = pcap_next_ex( fp, &header, &pkt_data)) >= 0){
+		
+		if(res == 0){
+			return false;
 		}
-		printf("\n");
+		else{
+			/*printf("Destination MAC\n");
+			for(int i = 0; i < 6; i++){
+				printf("%.2x ", pkt_data[i]);
+			}*/
+			return true;
+		}
+	}
+	/*	printf("\n");
 		printf("Source MAC\n");
 		for(int i = 6; i < 12; i++){
 			printf("%.2x ", pkt_data[i]);
@@ -107,10 +112,10 @@ void Camera_Connection::receivePacket(void){
 		}
 		printf("\n\n");
         /* Print the packet */
-        for (i=1; (i < header->caplen + 1 ) ; i++){
+      /*  for (i=1; (i < header->caplen + 1 ) ; i++){
             printf("%.2x ", pkt_data[i-1]);
             if ( (i % LINE_LEN) == 0) printf("\n");
-        }
-	}
+        }*/
+//	}
 }
 

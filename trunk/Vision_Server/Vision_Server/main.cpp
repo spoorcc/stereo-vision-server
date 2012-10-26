@@ -15,7 +15,7 @@ void main()
    
 	//thread thread_2 = thread(startGraphicsManager);
 	//Sleep(1000);
-	thread thread_3 = thread(startClientManager);
+	//thread thread_3 = thread(startClientManager);
 	//Sleep(1000);
 	thread thread_1 = thread(startCameraManager);
 

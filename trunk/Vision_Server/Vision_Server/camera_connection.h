@@ -16,7 +16,7 @@ using namespace std;
 class Camera_Connection {
 public:
 	int chooseEthernetCard(void);
-	void receivePacket(void);
+	bool receivePacket(void);
 	void sendPacket(Packet& packet);
 
 private:
@@ -29,6 +29,7 @@ private:
 	struct pcap_pkthdr *header;
 	const u_char *pkt_data;
 
-	u_char packet[297];
+	
+
 };
 

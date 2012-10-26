@@ -161,3 +161,12 @@ bool Packet::addUint16(uint16_t _value) {
 
 	return true;
 }
+
+void Packet::setPacketLength(void)
+{
+	// Lengt
+	uint16_t tempMsgSize = MsgSize - 42;
+
+	Buffer[38]	= uint8_t(tempMsgSize);
+	Buffer[39]	= uint8_t(tempMsgSize >> 8);
+}

@@ -1,6 +1,8 @@
 #include "includes.h"
 #include "camera_manager.h"
-#include "packetReceiver.h""
+#include "packetReceiver.h"
+
+#include <time.h>
 
 using namespace std;
 
@@ -27,32 +29,45 @@ void startCameraManager(void)
 	connection.chooseEthernetCard();
 	thread thread_sendData		= thread(sendDataToCamera);
 	thread thread_receiveData	= thread(receiveDataFromCamera);
+	thread thread_calMesPS		= thread(calculateMessagesPerSecond);
 }
 
 void receiveDataFromCamera(void)
 {
+	while(1)
+	{
 	connection.receivePacket();
+	messagesReceivedCount ++;
+	}
 }
 
 void calculateMessagesPerSecond(void)
 {
+	for(;;)
+	{
+		Sleep(1000);
+		printf("Message sent: %d/sec, received: %d/sec \n",messagesSentCount, messagesReceivedCount);
+		messagesSentCount = 0;
+		messagesReceivedCount =0 ;
+	}
 }
 
 void sendDataToCamera(void)
 {	
 	Packet packet = Packet();
 	packet.changeAllHeaders(0xB0, 0x0b0b, true);
-	string getInput;
-
-	for(int i = 0; i < 200; i++)
+	string getSpace;
+	for(int i = 0; i < 1024; i++)
 	{
 	packet.addUint8(0xff);
 	}
+	packet.setPacketLength();
 
 	for(;;)
 	{
-	//cin >> getInput;
+	cin >> getSpace;
 	connection.sendPacket(packet);
+	messagesSentCount ++;
 	}
 }
 
