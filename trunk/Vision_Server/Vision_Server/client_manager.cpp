@@ -40,7 +40,6 @@ void sendDataToClient(void)
 	range = 0;
 
 	//packet.newPacket(FILLED_UP_DATA, range, READ);
-	clientPacket.newPacket();
 	for (int j = 0; j < 32; j++)
 	{
 		clientPacket.addUint8(0x00);

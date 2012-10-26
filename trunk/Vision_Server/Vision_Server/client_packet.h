@@ -8,7 +8,6 @@ class Client_Packet {
 public:
 	static const int Client_Packet::PACKET_MAXSIZE = 1024;
 	Client_Packet::Client_Packet(void);
-	void Client_Packet::newPacket(void); 
 	uint8_t* Client_Packet::getBuffer(void);
 	void Client_Packet::reset(void);
 	bool Client_Packet::canAdd(int);

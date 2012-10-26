@@ -3,8 +3,6 @@
 #define Client_ip  "145.48.115.192" //"192.168.123.4" 
 #define Client_port 49679
 
-
-
 using namespace std;
 
 Client_Connection::Client_Connection(boost::asio::io_service& io_service, bool listen) : socket_(io_service) 
