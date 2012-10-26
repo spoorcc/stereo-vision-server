@@ -73,6 +73,7 @@
     <ClCompile Include="camera_manager.cpp" />
     <ClCompile Include="client_connection.cpp" />
     <ClCompile Include="client_manager.cpp" />
+    <ClCompile Include="client_packet.cpp" />
     <ClCompile Include="graphics_manager.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="packet.cpp" />
@@ -83,6 +84,7 @@
     <ClInclude Include="camera_manager.h" />
     <ClInclude Include="client_connection.h" />
     <ClInclude Include="client_manager.h" />
+    <ClInclude Include="client_packet.h" />
     <ClInclude Include="includes.h" />
     <ClInclude Include="packet.h" />
     <ClInclude Include="packetReceiver.h" />
