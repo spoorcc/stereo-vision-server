@@ -6,9 +6,9 @@
 
 class Packet {
 public:
-	static const int PACKET_MAXSIZE = 260;
+	static const int PACKET_MAXSIZE = 297;
 	Packet(void);
-	void newPacket(uint8_t,uint16_t, bool); 
+	void newPacket(void); 
 	uint8_t* getBuffer(void);
 	void reset(void);
 	bool canAdd(int);
@@ -22,5 +22,5 @@ public:
 private:
 	uint16_t readPos;
 	uint16_t MsgSize;
-	uint8_t Buffer[PACKET_MAXSIZE]; 
+	uint8_t	Buffer[PACKET_MAXSIZE]; 
 };

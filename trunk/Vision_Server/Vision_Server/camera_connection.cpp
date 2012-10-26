@@ -3,56 +3,114 @@
 //#include <boost/asio.hpp>
 
 using namespace std;
-using boost::asio::ip::udp;
 
-#define Cam_ip  "224.0.0.251" //"192.168.123.4" 
-#define Cam_port 49679
+int Camera_Connection::chooseEthernetCard(void){
 
-#define Local_ip "169.254.184.112"
+	i = 0;
+	 printf("pktdump_ex: prints the packets of the network using WinPcap.\n");
+	 printf("   Usage: pktdump_ex [-s source]\n\n"
+           "   Examples:\n"
+           "      pktdump_ex -s file://c:/temp/file.acp\n"
+           "      pktdump_ex -s rpcap://\\Device\\NPF_{C8736017-F3C3-4373-94AC-9A34B7DAD998}\n\n");
+
+        printf("\nNo adapter selected: printing the device list:\n");
+        /* The user didn't provide a packet source: Retrieve the local device list */
+        if (pcap_findalldevs_ex(PCAP_SRC_IF_STRING, NULL, &alldevs, errbuf) == -1)
+        {
+            fprintf(stderr,"Error in pcap_findalldevs_ex: %s\n", errbuf);
+            return -1;
+        }
+        
+        /* Print the list */
+        for(d=alldevs; d; d=d->next)
+        {
+            printf("%d. %s\n    ", ++i, d->name);
+
+            if (d->description)
+                printf(" (%s)\n", d->description);
+            else
+                printf(" (No description available)\n");
+        }
+        
+        if (i==0)
+        {
+            fprintf(stderr,"No interfaces found! Exiting.\n");
+            return -1;
+        }
+        
+        printf("Enter the interface number (1-%d):",i);
+        scanf_s("%d", &inum);
+        
+       if (inum < 1 || inum > i)
+        {
+            printf("\nInterface number out of range.\n");
+
+            /* Free the device list */
+            pcap_freealldevs(alldevs);
+            return -1;
+        }
+        
+        /* Jump to the selected adapter */
+        for (d=alldevs, i = 0; i < inum-1 ;d=d->next, i++);
+        
+        /* Open the device */
+        if ( (fp= pcap_open(d->name,
+                            100 /*snaplen*/,
+                            PCAP_OPENFLAG_PROMISCUOUS /*flags*/,
+                            20 /*read timeout*/,
+                            NULL /* remote authentication */,
+                            errbuf)
+                            ) == NULL)
+        {
+            fprintf(stderr,"\nError opening adapter\n");
+            return -1;
+        }
+
+		fprintf(stderr,"\verbinding is klaar\n");
+}
 
 
-Camera_Connection::Camera_Connection(boost::asio::io_service& io_service, bool listen) : socket_(io_service) {
-	try{
-		//Open send socket
-		socket_.open(udp::v4());
-		//boost::asio::socket_base::broadcast option(true);
-		//socket_.set_option(option);
+void Camera_Connection::sendPacket(Packet& packet){
 
-		remote_endpoint = boost::asio::ip::udp::endpoint(boost::asio::ip::address::from_string(Cam_ip),  Cam_port);
+		pcap_sendpacket(	fp, // the adapter handle
+							packet.getBuffer(), // the packet
+							packet.getMsgSize() // the length of the packet
+							);
+}
 
-		//open retreive socket
-		if(listen){
-			//udp::endpoint local_endpoint = udp::endpoint(boost::asio::ip::address::from_string(Local_ip), Cam_port);
-			udp::endpoint local_endpoint = udp::endpoint(boost::asio::ip::address_v4::any(), Cam_port);
-			socket_.bind(local_endpoint);
+void Camera_Connection::receivePacket(void){
+
+	while((res = pcap_next_ex( fp, &header, &pkt_data)) >= 0){
+
+		if(res == 0)
+           /* Timeout elapsed */
+         continue;
+
+		printf("Destination MAC\n");
+		for(int i = 0; i < 6; i++){
+			printf("%.2x ", pkt_data[i]);
 		}
-	}
-	catch (std::exception& e)
-	{
-		std::cerr << e.what() << std::endl;
+		printf("\n");
+		printf("Source MAC\n");
+		for(int i = 6; i < 12; i++){
+			printf("%.2x ", pkt_data[i]);
+		}
+		printf("\n");
+		printf("Source Adress\n");
+		for(int i = 26; i < 30; i++){
+			printf("%d ", pkt_data[i]);
+		}
+		printf("\n");
+		printf("Destination Adress\n");
+		for(int i = 30; i < 34; i++){
+			printf("%d ", pkt_data[i]);
+		}
+		printf("\n\n");
+        /* Print the packet */
+        for (i=1; (i < header->caplen + 1 ) ; i++){
+            printf("%.2x ", pkt_data[i-1]);
+            if ( (i % LINE_LEN) == 0) printf("\n");
+        }
 	}
 }
 
-void Camera_Connection::sendPacket(Packet& packet)
-{
-	//Verzenden
-	//std::cout << "Send to " << remote_endpoint << std::endl;
-	socket_.send_to(boost::asio::buffer(packet.getBuffer(), 260), remote_endpoint, 0, ignored_error);
-}
-
-boost::array<uint8_t, 260> Camera_Connection::read(void)
-{
-	boost::array<uint8_t, 260> recv_buf;
-	try
-	{
-		udp::endpoint sender_endpoint;
-		size_t len = socket_.receive_from(boost::asio::buffer(recv_buf), sender_endpoint);
-		//socket_.receive(boost::asio::buffer(recv_buf));
-		return recv_buf;
-	}
-	catch (std::exception& e)
-	{
-		std::cerr << e.what() << std::endl;
-	}
-	return recv_buf;
-}

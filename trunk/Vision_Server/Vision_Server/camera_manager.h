@@ -4,10 +4,6 @@
 #include <cv.h>
 
 using namespace boost; 
-//Camera_Connection connection(boost::asio::io_service);
-Camera_Connection connection(boost::asio::io_service&);
-
-boost::asio::io_service io_service;
 
 void receiveDataFromCamera(void);
 void sendDataToCamera(void);
