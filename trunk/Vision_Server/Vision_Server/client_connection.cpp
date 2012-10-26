@@ -3,6 +3,8 @@
 #define Client_ip  "145.48.115.192" //"192.168.123.4" 
 #define Client_port 49679
 
+
+
 using namespace std;
 
 Client_Connection::Client_Connection(boost::asio::io_service& io_service, bool listen) : socket_(io_service) 
@@ -26,25 +28,23 @@ Client_Connection::Client_Connection(boost::asio::io_service& io_service, bool l
 	}
 }
 
-void Client_Connection::sendPacket(Packet& packet)
+void Client_Connection::sendPacket(Client_Packet& packet)
 {
-	//Verzenden
-	//std::cout << "Send to " << remote_endpoint << std::endl;
-	socket_.send_to(boost::asio::buffer(packet.getBuffer(), 260), remote_endpoint, 0, ignored_error);
+	socket_.send_to(boost::asio::buffer(packet.getBuffer(), packet.getMsgSize()), remote_endpoint, 0, ignored_error);
 }
 
-boost::array<uint8_t, 260> Client_Connection::read(void)
+boost::array<uint8_t, Client_Connection::PACKET_MAXSIZE> Client_Connection::read(void)
 {
-	boost::array<uint8_t, 260> recv_buf;
+	boost::array<uint8_t, PACKET_MAXSIZE> recv_buf;
 	try
 	{
 		udp::endpoint sender_endpoint;
 
-		printf("Start Receiving");
+		printf("Start Receiving...");
 
 		size_t len = socket_.receive_from(boost::asio::buffer(recv_buf), sender_endpoint);
 
-		printf("Received from: %s", sender_endpoint.address().to_string());
+		printf("Received from: %s\n", sender_endpoint.address().to_string());
 
 		return recv_buf;
 	}

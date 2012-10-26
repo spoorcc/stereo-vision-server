@@ -35,15 +35,15 @@ void sendDataToClient(void)
 	uint16_t range = 0;
 
 	Client_Connection connection(client_io_service, false);
-	Packet packet = Packet();
+	Client_Packet clientPacket = Client_Packet();
 
 	range = 0;
 
 	//packet.newPacket(FILLED_UP_DATA, range, READ);
-	packet.newPacket(0x00, 0x0000, true);
+	clientPacket.newPacket();
 	for (int j = 0; j < 32; j++)
 	{
-		packet.addUint8(0x00);
+		clientPacket.addUint8(0x00);
 	}
 
 	for(;;)
@@ -53,7 +53,7 @@ void sendDataToClient(void)
 			range = 1;
 		}
 
-		connection.sendPacket(packet);
+		connection.sendPacket(clientPacket);
 		messagesClientSentCount++;
 
 		boost::this_thread::sleep(boost::posix_time::milliseconds(100));
@@ -67,7 +67,7 @@ void receiveDataFromClient(void)
 	Client_Connection connection(client_io_service, true);
 	
 	//Creating the buffer before the loop, otherwise it takes extremely much processing time
-	boost::array<uint8_t, 260> bufferArray = {};
+	boost::array<uint8_t, connection.PACKET_MAXSIZE> bufferArray = {};
 	for(;;){
 		bufferArray = connection.read();
 		//connection

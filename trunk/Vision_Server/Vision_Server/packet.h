@@ -6,21 +6,21 @@
 
 class Packet {
 public:
-	static const int PACKET_MAXSIZE = 297;
-	Packet(void);
-	void newPacket(void); 
-	uint8_t* getBuffer(void);
-	void reset(void);
-	bool canAdd(int);
-	uint16_t getMsgSize(void); 
-	uint8_t readUint8(void);	
-	uint16_t readUint16(void);
-	bool addUint8(uint8_t);		
-	bool addUint16(uint16_t);
+	static const int Packet::PACKET_MAXSIZE = 297;
+	Packet::Packet(void);
+	void Packet::newPacket(void); 
+	uint8_t* Packet::getBuffer(void);
+	void Packet::reset(void);
+	bool Packet::canAdd(int);
+	uint16_t Packet::getMsgSize(void); 
+	uint8_t Packet::readUint8(void);	
+	uint16_t Packet::readUint16(void);
+	bool Packet::addUint8(uint8_t);		
+	bool Packet::addUint16(uint16_t);
 	void Packet::changeAllHeaders(uint8_t, uint16_t, bool);
 	void Packet::changeRange(uint16_t);
 private:
-	uint16_t readPos;
-	uint16_t MsgSize;
-	uint8_t	Buffer[PACKET_MAXSIZE]; 
+	uint16_t Packet::readPos;
+	uint16_t Packet::MsgSize;
+	uint8_t	Packet::Buffer[Packet::PACKET_MAXSIZE]; 
 };
