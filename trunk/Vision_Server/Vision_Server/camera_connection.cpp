@@ -7,13 +7,6 @@ using namespace std;
 int Camera_Connection::chooseEthernetCard(void){
 
 	i = 0;
-	 printf("pktdump_ex: prints the packets of the network using WinPcap.\n");
-	 printf("   Usage: pktdump_ex [-s source]\n\n"
-           "   Examples:\n"
-           "      pktdump_ex -s file://c:/temp/file.acp\n"
-           "      pktdump_ex -s rpcap://\\Device\\NPF_{C8736017-F3C3-4373-94AC-9A34B7DAD998}\n\n");
-
-        printf("\nNo adapter selected: printing the device list:\n");
         /* The user didn't provide a packet source: Retrieve the local device list */
         if (pcap_findalldevs_ex(PCAP_SRC_IF_STRING, NULL, &alldevs, errbuf) == -1)
         {

@@ -7,8 +7,8 @@ Client_Packet::Client_Packet(){
 }
 
 void Client_Packet::reset(void) {
-	MsgSize = 46;
-	readPos = 46;
+	MsgSize = 0;
+	readPos = 0;
 }
 
 bool Client_Packet::canAdd(int _size) {

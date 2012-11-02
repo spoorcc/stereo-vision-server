@@ -40,10 +40,10 @@ string Client_Connection::read(boost::array<uint8_t, Client_Connection::PACKET_M
 	{
 		udp::endpoint sender_endpoint;
 
-		printf("Start Receiving...");
+		printf("Start Receiving...\n");
 
 		size_t len = socket_.receive_from(boost::asio::buffer(msg), sender_endpoint);
-		string currentClient = sender_endpoint.address().to_string();
+		string currentClient = sender_endpoint.address().to_v4().to_string();
 		return currentClient;
 	}
 	catch (std::exception& e)
