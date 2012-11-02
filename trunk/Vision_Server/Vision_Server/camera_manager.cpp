@@ -54,7 +54,7 @@ void calculateMessagesPerSecond(void)
 
 void sendDataToCamera(void)
 {	
-	Packet packet = Packet();
+	Camera_packet packet = Camera_packet();
 	packet.changeAllHeaders(0xB0, 0x0b0b, true);
 	string getSpace;
 	for(int i = 0; i < 1024; i++)

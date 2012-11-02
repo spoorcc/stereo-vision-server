@@ -6,7 +6,7 @@
 #include <string>
 #include <pcap.h>
 
-#include "packet.h"
+#include "camera_packet.h"
 
 #define LINE_LEN 16
 
@@ -17,7 +17,7 @@ class Camera_Connection {
 public:
 	int chooseEthernetCard(void);
 	bool receivePacket(void);
-	void sendPacket(Packet& packet);
+	void sendPacket(Camera_packet & packet);
 
 private:
 
