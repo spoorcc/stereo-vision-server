@@ -13,11 +13,11 @@ using boost::asio::ip::udp;
 
 class Client_Connection {
 public:
-	static const int			Client_Connection::PACKET_MAXSIZE = 1024;
+	static const int	Client_Connection::PACKET_MAXSIZE = 1024;
 	Client_Connection::Client_Connection(boost::asio::io_service&, bool); 
-	void						Client_Connection::sendPacket(Client_Packet&);
-	boost::array<uint8_t, Client_Connection::PACKET_MAXSIZE> Client_Connection::read(void);
-	void						Client_Connection::setReadConnection(void);
+	void				Client_Connection::sendPacket(Client_Packet&);
+	string				Client_Connection::read(boost::array<uint8_t, Client_Connection::PACKET_MAXSIZE>&);
+	void				Client_Connection::setReadConnection(void);
 private:
 	uint16_t					Client_Connection::readPos;
 	uint16_t					Client_Connection::MsgSize;

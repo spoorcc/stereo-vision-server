@@ -6,6 +6,8 @@ using namespace std;
 uint32_t messagesClientReceivedCount = 0;
 uint32_t messagesClientSentCount = 0;
 
+string clients[100];
+
 void startClientManager(void)
 {
 	//TODO
@@ -20,7 +22,7 @@ void calculateClientMessagesPerSecond(void)
 {
 	for(;;){
 		boost::this_thread::sleep(boost::posix_time::milliseconds(1000));
-		printf("Messages sent: %d/sec, received: %d/sec \n", messagesClientSentCount, messagesClientReceivedCount);
+		printf("[Client Manager] Messages sent: %d/sec, received: %d/sec \n", messagesClientSentCount, messagesClientReceivedCount);
 		messagesClientSentCount = 0;
 		messagesClientReceivedCount = 0;
 	}
@@ -67,9 +69,22 @@ void receiveDataFromClient(void)
 	
 	//Creating the buffer before the loop, otherwise it takes extremely much processing time
 	boost::array<uint8_t, connection.PACKET_MAXSIZE> bufferArray = {};
+	
 	for(;;){
-		bufferArray = connection.read();
-		//connection
+		//Listen and return the client IP
+		string currentClient = connection.read(bufferArray);
+
+		//Check if client exists, else create new client
+		bool newClient = true;
+		for each(string client in clients)
+		{
+			if(client.compare(currentClient) == 0)
+			{
+				newClient = false;
+			}
+		}
+
+		printf("Received from: %s\n", currentClient);
 		
 	}
 }
