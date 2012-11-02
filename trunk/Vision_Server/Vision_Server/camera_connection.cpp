@@ -69,7 +69,7 @@ int Camera_Connection::chooseEthernetCard(void){
 		fprintf(stderr,"\verbinding is klaar\n");
 }
 
-void Camera_Connection::sendPacket(Camera_packet & packet){
+void Camera_Connection::sendPacket(Camera_Packet & packet){
 		pcap_sendpacket
 							(	fp, // the adapter handle
 							packet.getBuffer(), // the packet

@@ -1,6 +1,6 @@
 #include "includes.h"
 #include "camera_manager.h"
-#include "packetReceiver.h"
+#include "packet_receiver.h"
 
 #include <time.h>
 
@@ -54,7 +54,7 @@ void calculateMessagesPerSecond(void)
 
 void sendDataToCamera(void)
 {	
-	Camera_packet packet = Camera_packet();
+	Camera_Packet packet = Camera_Packet();
 	packet.changeAllHeaders(0xB0, 0x0b0b, true);
 	string getSpace;
 	for(int i = 0; i < 1024; i++)

@@ -5,10 +5,10 @@ using namespace std;
 //typedef unsigned char     uint8_t;
 
 // Create new packet with 1 byte header
-void Camera_packet::newPacket(void) {
+void Camera_Packet::newPacket(void) {
 }
 
-void Camera_packet::changeAllHeaders(uint8_t _header, uint16_t _range, bool _read){
+void Camera_Packet::changeAllHeaders(uint8_t _header, uint16_t _range, bool _read){
 	//Header
 	Buffer[42] = _header;
 
@@ -25,14 +25,14 @@ void Camera_packet::changeAllHeaders(uint8_t _header, uint16_t _range, bool _rea
 	}
 }
 
-void Camera_packet::changeRange(uint16_t _range)
+void Camera_Packet::changeRange(uint16_t _range)
 {
 	//Range
 	Buffer[1] = uint8_t(_range);
 	Buffer[2] = uint8_t(_range >> 8);
 }
 
-Camera_packet::Camera_packet(){
+Camera_Packet::Camera_Packet(){
 	reset();
 	// set mac destination address to 01 : 01 : 01 : 01 : 01 : 01
 		Buffer[0] = 0x01;
@@ -102,39 +102,39 @@ Camera_packet::Camera_packet(){
 		Buffer[41]	= 0xe4;
 }
 
-void Camera_packet::reset(void) {
+void Camera_Packet::reset(void) {
 	MsgSize = 46;
 	readPos = 46;
 }
 
-bool Camera_packet::canAdd(int _size) {
+bool Camera_Packet::canAdd(int _size) {
 	return (_size+readPos < PACKET_MAXSIZE);
 }
 
-uint8_t* Camera_packet::getBuffer(void) {
+uint8_t* Camera_Packet::getBuffer(void) {
 	return Buffer;
 }
 
-uint16_t Camera_packet::getMsgSize(void) {
+uint16_t Camera_Packet::getMsgSize(void) {
 	return MsgSize;
 }
 
 //Read uint8 (1 byte) from to packet
-uint8_t Camera_packet::readUint8(void) {
+uint8_t Camera_Packet::readUint8(void) {
 	uint8_t v = Buffer[readPos];
 	readPos += 1;
 	return v;
 }
 
 //Read uint16 (2 bytes) from to packet
-uint16_t Camera_packet::readUint16(void) {
+uint16_t Camera_Packet::readUint16(void) {
 	uint16_t v = uint16_t(uint16_t(Buffer[readPos]) | (uint16_t(Buffer[readPos+1]) << 8));
 	readPos += 2;
 	return v;
 }
 
 //Add uint8 (1 byte) to packet
-bool Camera_packet::addUint8(uint8_t _value) {
+bool Camera_Packet::addUint8(uint8_t _value) {
 	if (canAdd(1) == false) {
 		return false;
 	}
@@ -147,7 +147,7 @@ bool Camera_packet::addUint8(uint8_t _value) {
 }
 
 //Add uint16 (2 bytes)  to packet
-bool Camera_packet::addUint16(uint16_t _value) {
+bool Camera_Packet::addUint16(uint16_t _value) {
 	if (canAdd(2) == false) {
 		return false;
 	}
@@ -162,7 +162,7 @@ bool Camera_packet::addUint16(uint16_t _value) {
 	return true;
 }
 
-void Camera_packet::setPacketLength(void)
+void Camera_Packet::setPacketLength(void)
 {
 	// Lengt
 	uint16_t tempMsgSize = MsgSize - 42;

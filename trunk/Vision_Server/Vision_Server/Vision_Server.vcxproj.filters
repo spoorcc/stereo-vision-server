@@ -59,13 +59,13 @@
     <ClInclude Include="client_manager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="packetReceiver.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="client_packet.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="camera_packet.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="packet_receiver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

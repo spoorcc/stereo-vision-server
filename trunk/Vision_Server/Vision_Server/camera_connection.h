@@ -17,7 +17,7 @@ class Camera_Connection {
 public:
 	int chooseEthernetCard(void);
 	bool receivePacket(void);
-	void sendPacket(Camera_packet & packet);
+	void sendPacket(Camera_Packet & packet);
 
 private:
 
