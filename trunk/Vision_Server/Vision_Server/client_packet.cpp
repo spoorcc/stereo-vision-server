@@ -53,8 +53,23 @@ bool Client_Packet::addUint8(uint8_t _value)
 	}
 
 	Buffer[readPos] = _value;
-	readPos += 1;
-	MsgSize += 1;
+	MsgSize++;
+	readPos++;
+
+	return true;
+}
+
+//Add uint8 (1 byte) to packet
+bool Client_Packet::addUint8(uint8_t *_value) 
+{
+	if (canAdd(1) == false) 
+	{
+		return false;
+	}
+
+	Buffer[readPos] = *_value;
+	MsgSize++;
+	readPos++;
 
 	return true;
 }
@@ -68,9 +83,9 @@ bool Client_Packet::addUint16(uint16_t _value)
 	}
 
 	Buffer[readPos] = uint8_t(_value);
-	readPos += 1;
+	readPos++;
 	Buffer[readPos] = uint8_t(_value >> 8);
-	readPos += 1;
+	readPos++;
 
 	MsgSize += 2;
 

@@ -6,6 +6,7 @@
 #include <deque>
 
 #include "client_packet.h"
+#include "client_server_protocol.h"
 
 class Client
 {
