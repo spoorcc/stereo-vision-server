@@ -37,11 +37,11 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>C:\Program Files (x86)\boost\boost_1_51\;C:\Vision_Server\OpenCV2.1\include\opencv;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Program Files\boost\boost_1_51\;C:\Users\Nick\Documents\Visual Studio 2010\Projects\OpenCV2.1\include\opencv;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <LibraryPath>C:\Program Files (x86)\boost\boost_1_51\lib;C:\Vision_Server\OpenCV2.1\lib;$(LibraryPath)</LibraryPath>
-    <SourcePath>C:\Vision_Server\OpenCV2.1\src\cv;C:\Vision_Server\OpenCV2.1\src\cvaux;C:\Vision_Server\OpenCV2.1\src\cxcore;C:\Vision_Server\OpenCV2.1\src\ml;C:\Vision_Server\OpenCV2.1\src\highgui;$(SourcePath)</SourcePath>
+    <LibraryPath>C:\Program Files\boost\boost_1_51\lib;C:\Users\Nick\Documents\Visual Studio 2010\Projects\OpenCV2.1\lib;$(LibraryPath)</LibraryPath>
+    <SourcePath>C:\Users\Nick\Documents\Visual Studio 2010\Projects\OpenCV2.1\src\cv;C:\Users\Nick\Documents\Visual Studio 2010\Projects\OpenCV2.1\src\cvaux;C:\Users\Nick\Documents\Visual Studio 2010\Projects\OpenCV2.1\src\cxcore;C:\Users\Nick\Documents\Visual Studio 2010\Projects\OpenCV2.1\src\highgui;C:\Users\Nick\Documents\Visual Studio 2010\Projects\OpenCV2.1\src\ml;$(SourcePath)</SourcePath>
     <ExecutablePath>C:\Program Files\boost\boost_1_51_0;$(ExecutablePath)</ExecutablePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -75,6 +75,7 @@
   <ItemGroup>
     <ClCompile Include="camera_connection.cpp" />
     <ClCompile Include="camera_manager.cpp" />
+    <ClCompile Include="client.cpp" />
     <ClCompile Include="client_connection.cpp" />
     <ClCompile Include="client_manager.cpp" />
     <ClCompile Include="client_packet.cpp" />
@@ -86,6 +87,7 @@
   <ItemGroup>
     <ClInclude Include="camera_connection.h" />
     <ClInclude Include="camera_manager.h" />
+    <ClInclude Include="client.h" />
     <ClInclude Include="client_connection.h" />
     <ClInclude Include="client_manager.h" />
     <ClInclude Include="client_packet.h" />

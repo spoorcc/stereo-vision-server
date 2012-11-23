@@ -9,6 +9,6 @@ boost::asio::io_service client_io_service;
 
 void startClientManager(void);
 void receiveDataFromClient(void);
-void sendDataToClient(void);
+void dataSender(Client*);
 
 void calculateClientMessagesPerSecond(void);

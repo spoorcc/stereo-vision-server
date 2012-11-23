@@ -1,26 +1,25 @@
 #include "client_connection.h"
 
-
-#define Client_ip  "145.48.115.192" //"192.168.123.4" 
 #define Client_port 49679
 
 using namespace std;
 
-
-
-Client_Connection::Client_Connection(boost::asio::io_service& io_service, bool listen) : socket_(io_service) 
+Client_Connection::Client_Connection(boost::asio::io_service& io_service, bool listen, string Client_ip) : socket_(io_service) 
 {
 	try{
 		//Open send socket
 		socket_.open(udp::v4());
 
-		remote_endpoint = boost::asio::ip::udp::endpoint(boost::asio::ip::address::from_string(Client_ip),  Client_port);
-
 		//bind retreive socket
-		if(listen){
+		if(listen)
+		{
 			//udp::endpoint local_endpoint = udp::endpoint(boost::asio::ip::address::from_string(Local_ip), Client_port);
 			udp::endpoint local_endpoint = udp::endpoint(boost::asio::ip::address_v4::any(), Client_port);
 			socket_.bind(local_endpoint);
+		}
+		else
+		{
+			remote_endpoint = boost::asio::ip::udp::endpoint(boost::asio::ip::address::from_string(Client_ip),  Client_port);
 		}
 	}
 	catch (std::exception& e)

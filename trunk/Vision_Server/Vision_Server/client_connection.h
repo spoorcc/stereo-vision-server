@@ -6,15 +6,15 @@
 #include <boost/array.hpp>
 #include <boost/asio.hpp>
 
-#include "client_packet.h"
+#include "client.h"
 
 using namespace std;
 using boost::asio::ip::udp;
 
 class Client_Connection {
 public:
-	static const int	Client_Connection::PACKET_MAXSIZE = 1024;
-	Client_Connection::Client_Connection(boost::asio::io_service&, bool); 
+	static const int	Client_Connection::PACKET_MAXSIZE = 500;
+	Client_Connection::Client_Connection(boost::asio::io_service&, bool, string); 
 	void				Client_Connection::sendPacket(Client_Packet&);
 	string				Client_Connection::read(boost::array<uint8_t, Client_Connection::PACKET_MAXSIZE>&);
 	void				Client_Connection::setReadConnection(void);

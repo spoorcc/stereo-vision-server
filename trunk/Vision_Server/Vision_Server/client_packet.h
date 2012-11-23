@@ -6,7 +6,7 @@
 
 class Client_Packet {
 public:
-	static const int Client_Packet::PACKET_MAXSIZE = 1024;
+	static const int Client_Packet::PACKET_MAXSIZE = 500;
 	Client_Packet::Client_Packet(void);
 	uint8_t* Client_Packet::getBuffer(void);
 	void Client_Packet::reset(void);

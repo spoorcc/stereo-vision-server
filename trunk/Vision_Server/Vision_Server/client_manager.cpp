@@ -1,16 +1,13 @@
 #include "includes.h"
 #include "client_manager.h"
 
-using namespace std;
-
 uint32_t messagesClientReceivedCount = 0;
 uint32_t messagesClientSentCount = 0;
 
-string clients[100];
+std::list<Client*> clients;
 
-int sizeSendBuffer = 100;
-char bufferArraySendChar[100];
-uint8_t bufferArraySendCharUint8_t[100];
+//TODO
+#define Client_ip  "1.2.3.4" //"145.48.115.192" //"192.168.123.4" 
 
 void startClientManager(void)
 {
@@ -18,7 +15,7 @@ void startClientManager(void)
 	cout << "[Client Manager] Client Manager started\n";
 	
 	thread thread_receive = thread(receiveDataFromClient);
-	thread thread_send = thread(sendDataToClient);
+
 	thread thread_calc = thread(calculateClientMessagesPerSecond);
 }
 
@@ -26,50 +23,40 @@ void calculateClientMessagesPerSecond(void)
 {
 	for(;;){
 		boost::this_thread::sleep(boost::posix_time::milliseconds(1000));
-		// printf("[Client Manager] Messages sent: %d/sec, received: %d/sec \n", messagesClientSentCount, messagesClientReceivedCount);
+		printf("[Client Manager] Messages sent: %d/sec, received: %d/sec \n", messagesClientSentCount, messagesClientReceivedCount);
 		messagesClientSentCount = 0;
 		messagesClientReceivedCount = 0;
 	}
 }
 
-void sendDataToClient(void)
+void dataSender(Client* client)
 {
 	printf("[Client Manager] start sending data\n");
-	
-	/////////////////////////////////////////////////////////////
-	//Test with Raw RGB
-	uint16_t range = 0;
+	cout << client->ipAddress;
+	Client_Connection connection(client_io_service, false, client->ipAddress);
 
-	Client_Connection connection(client_io_service, false);
 	Client_Packet clientPacket = Client_Packet();
 
-	range = 0;
-
-	//packet.newPacket(FILLED_UP_DATA, range, READ);
-/*	for (int j = 0; j < 32; j++)
-	{
-		clientPacket.addUint8(0x00);
-	}*/
+	clientPacket.addUint8(99);
 
 	for(;;)
 	{
-		range++;
-		if(range >= 1){
-			range = 1;
-		}
-
-		cin >> bufferArraySendChar;
-		for(int i = 0; i < sizeSendBuffer; i++)
-		{
-			clientPacket.addUint8(bufferArraySendChar[i]);
-		}
-
+		clientPacket.addUint8(55);
+		clientPacket.addUint8(55);
+		clientPacket.addUint8(56);
+		clientPacket.addUint8(57);
+		clientPacket.addUint8(58);
+		clientPacket.addUint8(59);
+		clientPacket.addUint8(60);
+		clientPacket.addUint8(40);
+		clientPacket.addUint8(61);
+		clientPacket.addUint8(99);
 		connection.sendPacket(clientPacket);
-
+		
 		messagesClientSentCount++;
 		clientPacket.reset();
 
-		boost::this_thread::sleep(boost::posix_time::milliseconds(100));
+		boost::this_thread::sleep(boost::posix_time::milliseconds(999));
 	}
 }
 
@@ -77,32 +64,41 @@ void receiveDataFromClient(void)
 {
 	printf("[Client Manager] start reading data\n");
 
-	Client_Connection connection(client_io_service, true);
+	Client_Connection connection(client_io_service, true, "");
 	
 	//Creating the buffer before the loop, otherwise it takes extremely much processing time
 	boost::array<uint8_t, connection.PACKET_MAXSIZE> bufferArray = {};
 	
-	for(;;){
+	for(;;)
+	{
 		//Listen and return the client IP
 		bufferArray.empty();
-		string currentClient = connection.read(bufferArray);
-		
-		messagesClientReceivedCount ++;
-		//Check if client exists, else create new client
-		bool newClient = true;
 
-		for each(string client in clients)
+		string currentClientAddress = connection.read(bufferArray);
+		
+		messagesClientReceivedCount++;
+		//Check if client exists, else create new client
+		bool isNewClient = true;
+
+		cout <<  currentClientAddress << ": " << "\n" ;
+
+		for each(Client* client in clients)
 		{
-			if(client.compare(currentClient) == 0)
+			if(client->ipAddress.compare(currentClientAddress) == 0)
 			{
-				newClient = false;
+				isNewClient = false;
 			}
 		}
-	
-		//printf("%.2x\n", currentClient);
-		
-		cout <<  currentClient << ": " << "\n" ;
 
+		if(isNewClient)
+		{
+			Client* newClient = new Client(currentClientAddress);
+			clients.push_back(newClient);
+			//TODO Is dit een kopie of niet??
+			thread thread_send = thread(dataSender, newClient);
+		}
+
+		//TODO messages handlen
 		for(int i = 0; i < bufferArray.max_size() ; i ++)
 		{
 			//Stop reading when we receive a 0x00 at the end of the msg
