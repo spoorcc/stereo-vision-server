@@ -13,8 +13,8 @@ void main()
 	cout << "[Main Server] Main server started\n";
    
 	//thread thread_2 = thread(startGraphicsManager);
-	thread thread_3 = thread(startClientManager);
-	//thread thread_1 = thread(startCameraManager);
+	//thread thread_3 = thread(startClientManager);
+	thread thread_1 = thread(startCameraManager);
 
 	for(;;)
 	{

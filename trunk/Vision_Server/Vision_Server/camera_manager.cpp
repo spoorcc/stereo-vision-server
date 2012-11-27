@@ -36,8 +36,10 @@ void receiveDataFromCamera(void)
 {
 	while(1)
 	{
-	connection.receivePacket();
-	messagesReceivedCount ++;
+		if(connection.receivePacket())
+		{
+			messagesReceivedCount ++;
+		}
 	}
 }
 
@@ -65,7 +67,7 @@ void sendDataToCamera(void)
 
 	for(;;)
 	{
-	cin >> getSpace;
+//	cin >> getSpace;
 	connection.sendPacket(packet);
 	messagesSentCount ++;
 	}

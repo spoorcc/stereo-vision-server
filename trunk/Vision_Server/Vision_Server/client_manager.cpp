@@ -125,7 +125,7 @@ void streamImageData(uint8_t imageType, uint8_t imageStream, uint8_t stream, Cli
 				{
 					//TODO 
 					//TODO
-					if(packet.getMsgSize() = 0)
+					if(packet.getMsgSize() == 0)
 					{
 						//TODO the rest of the data (Protocol)
 
