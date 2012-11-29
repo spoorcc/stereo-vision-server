@@ -14,4 +14,7 @@ void dataSender(Client*);
 void calculateClientMessagesPerSecond(void);
 
 void handleData(boost::array<uint8_t, Client_Connection::PACKET_MAXSIZE>* bufferArray, Client* client);
-void streamImageData(uint8_t, uint8_t, uint8_t, Client*);
+void sendImageData(uint8_t, uint8_t, uint8_t, Client*);
+void sendFrame(uint8_t imageType, uint8_t imageStream, uint8_t currentFrame, Client* client);
+
+void fillListWithRandomData(std::list<uint8_t*> dataList);

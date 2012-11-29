@@ -20,6 +20,8 @@ enum userRights{ VIEWER = 0x00,
                  ADMIN  = 0x01
                };
 
+
+
 // GET_IMAGE
 // <clientDataType> <imageType> <camera (0x01->0x07)> <stream ( true | false = 0x00 | 0x01 )>
 

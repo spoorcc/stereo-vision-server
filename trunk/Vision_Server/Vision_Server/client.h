@@ -12,6 +12,7 @@ class Client
 {
 public:
 	Client::Client(std::string);
+	void Client::QueuePacket(Client_Packet* packet);
 	std::string ipAddress;
 	std::deque<Client_Packet> buffer;
 };

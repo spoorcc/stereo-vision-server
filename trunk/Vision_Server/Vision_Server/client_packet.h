@@ -14,8 +14,7 @@ public:
 	uint16_t Client_Packet::getMsgSize(void); 
 	uint8_t Client_Packet::readUint8(void);	
 	uint16_t Client_Packet::readUint16(void);
-	bool Client_Packet::addUint8(uint8_t);		
-	bool Client_Packet::addUint8(uint8_t*);	
+	bool Client_Packet::addUint8(uint8_t);			
 	bool Client_Packet::addUint16(uint16_t);
 private:
 	uint16_t Client_Packet::readPos;
