@@ -16,8 +16,13 @@ void startClientManager(void)
 	printf("[Client Manager] Image data filled with random data.\n");
 
 	thread thread_receive = thread(receiveDataFromClient);
-
 	thread thread_calc = thread(calculateClientMessagesPerSecond);
+
+	for(;;)
+	{
+		//Don't close the client manager
+		boost::this_thread::sleep(boost::posix_time::milliseconds(1000)); 
+	}
 }
 
 void calculateClientMessagesPerSecond(void)
@@ -40,10 +45,11 @@ void dataSender(Client* client)
 	{
 		if(client->buffer.size() > 0)
 		{
-			//TODO Mutex?????
 			//Send packets and pop the first one
+			client->Lock();
 			connection.sendPacket(client->buffer.front());
 			client->buffer.pop_front();
+			client->Unlock();
 			messagesClientSentCount++;
 		}
 	}

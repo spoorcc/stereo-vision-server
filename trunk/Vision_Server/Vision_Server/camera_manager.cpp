@@ -30,6 +30,10 @@ void startCameraManager(void)
 	thread thread_sendData		= thread(sendDataToCamera);
 	thread thread_receiveData	= thread(receiveDataFromCamera);
 	thread thread_calMesPS		= thread(calculateMessagesPerSecond);
+	for(;;)
+	{
+		boost::this_thread::sleep(boost::posix_time::milliseconds(1000)); 
+	}
 }
 
 void receiveDataFromCamera(void)

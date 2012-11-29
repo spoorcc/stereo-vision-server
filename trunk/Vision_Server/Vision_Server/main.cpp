@@ -14,9 +14,10 @@ void main()
    
 	//thread thread_2 = thread(startGraphicsManager);
 	thread thread_3 = thread(startClientManager);
-	//thread thread_1 = thread(startCameraManager);
+	thread thread_1 = thread(startCameraManager);
 
 	for(;;)
 	{
+		boost::this_thread::sleep(boost::posix_time::milliseconds(1000)); 
 	}
 }
