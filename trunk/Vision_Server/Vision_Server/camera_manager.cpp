@@ -1,10 +1,7 @@
-#include "includes.h"
 #include "camera_manager.h"
-#include "packet_receiver.h"
-
-#include <time.h>
 
 using namespace std;
+using namespace boost; 
 
 //Constants
 #define CAM_CONFIG		 0x80

@@ -92,8 +92,8 @@
     <ClInclude Include="client_manager.h" />
     <ClInclude Include="client_packet.h" />
     <ClInclude Include="client_server_protocol.h" />
-    <ClInclude Include="includes.h" />
     <ClInclude Include="camera_packet.h" />
+    <ClInclude Include="graphics_manager.h" />
     <ClInclude Include="packet_receiver.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

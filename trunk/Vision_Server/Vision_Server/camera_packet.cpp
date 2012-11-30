@@ -2,8 +2,6 @@
 
 using namespace std;
 
-//typedef unsigned char     uint8_t;
-
 // Create new packet with 1 byte header
 void Camera_Packet::newPacket(void) {
 }

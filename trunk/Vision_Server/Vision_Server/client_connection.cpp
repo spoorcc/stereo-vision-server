@@ -30,7 +30,8 @@ Client_Connection::Client_Connection(boost::asio::io_service& io_service, bool l
 
 void Client_Connection::sendPacket(Client_Packet& packet)
 {
-	socket_.send_to(boost::asio::buffer(packet.getBuffer(), packet.getMsgSize()), remote_endpoint, 0, ignored_error);
+	//socket_.async_send_to(packet.getBuffer(), remote_endpoint, 0, ignored_error);
+	socket_.send_to(boost::asio::buffer(packet.getBuffer()), remote_endpoint, 0, ignored_error);
 }
 
 string Client_Connection::read(boost::array<uint8_t, Client_Connection::PACKET_MAXSIZE>& msg)

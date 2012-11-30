@@ -1,13 +1,21 @@
-#include "includes.h"
-#include <Windows.h>
+#include <sdkddkver.h>
+#include <conio.h>
+#include <stdio.h>
+#include <string>
+#include <sstream>
+#include <boost/thread.hpp>
 
 using namespace std;
 using namespace boost; 
 
+void startCameraManager(void);
+void startGraphicsManager(void);
+void startClientManager(void);
+
 void main()
 {
 	cout <<	"----------------------------------\n";
-	cout <<	"--  Starting Vision Server v0.2 --\n";
+	cout <<	"--  Starting Vision Server v0.3 --\n";
 	cout <<	"----------------------------------\n";
 
 	cout << "[Main Server] Main server started\n";

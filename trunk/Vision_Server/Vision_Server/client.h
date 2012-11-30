@@ -1,5 +1,3 @@
-#pragma comment(lib, "Ws2_32.lib")
-
 #include <stdint.h>
 #include <iostream>
 #include <stdlib.h>

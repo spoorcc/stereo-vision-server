@@ -1,6 +1,4 @@
 #include "camera_connection.h"
-//#include <boost/array.hpp>
-//#include <boost/asio.hpp>
 
 using namespace std;
 

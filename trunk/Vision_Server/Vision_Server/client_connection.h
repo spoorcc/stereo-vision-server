@@ -1,8 +1,5 @@
-#pragma comment(lib, "Ws2_32.lib")
-
 #include <stdint.h>
 #include <iostream>
-#include <WinSock2.h>
 #include <boost/array.hpp>
 #include <boost/asio.hpp>
 

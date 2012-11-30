@@ -2,77 +2,86 @@
 
 using namespace std;
 
-Client_Packet::Client_Packet()
+Client_Packet::Client_Packet(int packet_size)
 {
-	reset();
+	Buffer.clear();
+	Buffer.resize(packet_size, 0);
 }
 
-void Client_Packet::reset(void) 
+bool Client_Packet::canAdd(int size) 
 {
-	MsgSize = 0;
-	readPos = 0;
-}
-
-bool Client_Packet::canAdd(int _size) 
-{
-	return (_size+readPos < PACKET_MAXSIZE);
-}
-
-uint8_t* Client_Packet::getBuffer(void) 
-{
-	return Buffer;
+	return (size+Buffer.size() < PACKET_MAXSIZE);
 }
 
 uint16_t Client_Packet::getMsgSize(void) 
 {
-	return MsgSize;
+	return Buffer.size();
 }
 
-//Read uint8 (1 byte) from to packet
-uint8_t Client_Packet::readUint8(void) 
+uint8_t Client_Packet::readUint8(uint16_t pos)
 {
-	uint8_t v = Buffer[readPos];
-	readPos += 1;
-	return v;
+	return Buffer[pos];
 }
 
 //Read uint16 (2 bytes) from to packet
-uint16_t Client_Packet::readUint16(void) 
+uint16_t Client_Packet::readUint16(uint16_t pos) 
 {
-	uint16_t v = uint16_t(uint16_t(Buffer[readPos]) | (uint16_t(Buffer[readPos+1]) << 8));
-	readPos += 2;
+	uint16_t v = uint16_t(uint16_t(Buffer[pos]) | (uint16_t(Buffer[pos+1]) << 8));
 	return v;
 }
 
 //Add uint8 (1 byte) to packet
-bool Client_Packet::addUint8(uint8_t _value) 
+bool Client_Packet::addUint8(uint8_t value) 
 {
 	if (canAdd(1) == false) 
 	{
 		return false;
 	}
+	Buffer.push_back(value);
+	return true;
+}
 
-	Buffer[readPos] = _value;
-	MsgSize++;
-	readPos++;
-
+//Add uint8 (1 byte) to packet
+bool Client_Packet::addUint8(uint8_t value, uint16_t pos) 
+{
+	Buffer.at(pos) = value;
 	return true;
 }
 
 //Add uint16 (2 bytes)  to packet
-bool Client_Packet::addUint16(uint16_t _value) 
+bool Client_Packet::addUint16(uint16_t value) 
 {
 	if (canAdd(2) == false) 
 	{
 		return false;
 	}
 
-	Buffer[readPos] = uint8_t(_value);
-	readPos++;
-	Buffer[readPos] = uint8_t(_value >> 8);
-	readPos++;
-
-	MsgSize += 2;
+	Buffer.push_back(uint8_t(value));
+	Buffer.push_back(uint8_t(value >> 8));
 
 	return true;
+}
+
+//Add uint16 (2 bytes)  to packet
+bool Client_Packet::addUint16(uint16_t value, uint16_t startPos) 
+{
+	Buffer.at(startPos) = uint8_t(value);
+	Buffer.at(startPos+1) = uint8_t(value >> 8);
+
+	return true;
+}
+
+bool Client_Packet::addDeque(std::vector<uint8_t*> *deq, int size, uint16_t startPos)
+{
+	if(Buffer.size() + (*deq).size() <= Buffer.max_size())
+	{
+		return false;
+	}
+	memcpy(&Buffer[startPos] , &deq, size);
+	return true;
+}
+
+std::vector<uint8_t> Client_Packet::getBuffer(void)
+{
+	return Buffer;
 }

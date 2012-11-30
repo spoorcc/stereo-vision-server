@@ -1,6 +1,11 @@
-#include "includes.h"
+#include <conio.h>
+#include <stdio.h>
+#include <stdint.h>
+#include <string>
+#include <sstream>
+#include <highgui.h>
+#include <cv.h>
 #include <boost/array.hpp>
-#include <boost/asio.hpp>
 
 #define BUFFER_SIZE		260
 #define FILL_UP_PIXEL_SIZE 921600

@@ -1,5 +1,3 @@
-#pragma comment(lib, "Ws2_32.lib")
-
 #include <iostream>
 #include <stdlib.h>
 #include <stdio.h>
@@ -11,7 +9,6 @@
 #define LINE_LEN 16
 
 using namespace std;
-
 
 class Camera_Connection {
 public:

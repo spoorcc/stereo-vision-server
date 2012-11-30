@@ -1,17 +1,18 @@
-#include "includes.h"
 #include "client_manager.h"
 
 uint32_t messagesClientReceivedCount = 0;
 uint32_t messagesClientSentCount = 0;
 
 std::list<Client*> clients;
-std::list<uint8_t*> testImageData;
+std::vector<uint8_t*> testImageData;
+
+using namespace clientServerProtocol;
 
 void startClientManager(void)
 {
 	//TODO
 	printf("[Client Manager] Client Manager started.\n");
-	
+	testImageData.resize(3000);
 	fillListWithRandomData(testImageData);
 	printf("[Client Manager] Image data filled with random data.\n");
 
@@ -139,67 +140,54 @@ void sendImageData(uint8_t imageType, uint8_t imageStream, uint8_t stream, Clien
 
 void sendFrame(uint8_t imageType, uint8_t imageStream, uint8_t currentFrame, Client* client)
 {
-	Client_Packet packet = Client_Packet();
+	Client_Packet packet = Client_Packet(0);
 
 	//Send one full frame
-	uint16_t count = 1;
-	uint16_t totalSlices = ceil((double)testImageData.size() / 500);
-	uint16_t lastSliceSize = testImageData.size() % 500;
+	uint16_t currentSlice = 1;
+	uint16_t totalSlices = ceil((double)testImageData.size() / imageData::MAX_SLICE_LENGTH);
+	uint16_t lastSliceSize = testImageData.size() % imageData::MAX_SLICE_LENGTH;
 			
 	//When the lastSliceSize results zero, it actually means the data of the last slice is exactly 500 bytes
 	if(lastSliceSize == 0)
 	{
-		lastSliceSize = 500;
+		lastSliceSize = imageData::MAX_SLICE_LENGTH;
 	}
 		
-	for each(uint8_t *val in testImageData)
+	for(int currentSlice = 0; currentSlice < totalSlices; currentSlice++)
 	{
-
-		if(packet.getMsgSize() == 0)
+		uint16_t currentSliceSize = imageData::MAX_SLICE_LENGTH;
+		//When last slice
+		if(currentSlice == (totalSlices-1))
 		{
-			//Beginning of protocol image data
-			//TODO Cast enum to int for clientDataTypes
-			packet.addUint8(0x50);			//Byte 1	(Datatype)
-			packet.addUint8(imageType);		//Byte 2	(Image Type)
-			packet.addUint8(imageStream);	//Byte 3	(Stream ID)
-			packet.addUint8(currentFrame);			//Byte 4	(Current Frame)
-			packet.addUint16(count);		//Byte 5+6	(Current Slice)
-			packet.addUint16(totalSlices);	//Byte 7+8	(Total Slices)
-					
-			//When last slice
-			if(count == totalSlices)
-			{
-				packet.addUint16(lastSliceSize); //Byte 9+10 (Current Slice Length)
-			}
-			else
-			{
-				packet.addUint16(500);		//Byte 9+10 (Current Slice Length)
-			}
+			currentSliceSize = lastSliceSize;
 		}
+
+		int totalPacketSize = currentSliceSize + 10; //TODO counting the numbers of possible headers (byte 0 - 9)
+
+		packet = Client_Packet(totalPacketSize);
+
+		//Beginning of protocol image data	
+		packet.addUint8(IMAGE_DATA, 0);
+		packet.addUint8(imageType, 1);	
+		packet.addUint8(imageStream, 2);
+		packet.addUint8(currentFrame, 3);	
+		packet.addUint16(currentSlice, 4);	
+		packet.addUint16(totalSlices, 6);	
+		packet.addUint16(currentSliceSize, 8); 
+
 		//Add every char to the packet.
-		packet.addUint8(*val);				// Byte 11-500	(Data)
+		packet.addDeque(&testImageData, currentSliceSize, 10);
 
-		//Check if packet full
-		if(packet.getMsgSize() == 500)
-		{
-			//Send packet and reset packet
-			client->QueuePacket(&packet);
-			packet = Client_Packet();
-			count++;
-		}
-	}
-
-	if(packet.getMsgSize() > 0)
-	{
-		//Send last packet
+		//Send packet and reset packet
 		client->QueuePacket(&packet);
-	}	
+
+	}
 }
 
-void fillListWithRandomData(std::list<uint8_t*> dataList)
+void fillListWithRandomData(std::vector<uint8_t*> dataList)
 {
-	for(int i = 0; i < 3000; i++)
+	for(uint16_t i = 0; i < dataList.size(); i++)
 	{
-		dataList.push_back(new uint8_t(std::rand() % 256));
+		dataList.at(i) = new uint8_t(std::rand() % 256);
 	}
 }

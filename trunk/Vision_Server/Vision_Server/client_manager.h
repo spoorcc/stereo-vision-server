@@ -1,5 +1,5 @@
-#pragma comment(lib, "Ws2_32.lib")
 #include "client_connection.h"
+#include <boost\thread.hpp>
 
 using namespace boost; 
 
@@ -17,4 +17,4 @@ void handleData(boost::array<uint8_t, Client_Connection::PACKET_MAXSIZE>* buffer
 void sendImageData(uint8_t, uint8_t, uint8_t, Client*);
 void sendFrame(uint8_t imageType, uint8_t imageStream, uint8_t currentFrame, Client* client);
 
-void fillListWithRandomData(std::list<uint8_t*> dataList);
+void fillListWithRandomData(std::vector<uint8_t*> dataList);
