@@ -3,13 +3,12 @@
 Client::Client(std::string ip)
 {
 	ipAddress = ip;
-
 }
 
 void Client::QueuePacket(Client_Packet* packet)
 {
 	Lock();
-	buffer.push_back(*packet);
+	buffer.push_back(packet);
 	Unlock();
 }
 

@@ -65,19 +65,22 @@ bool Client_Packet::addUint16(uint16_t value)
 //Add uint16 (2 bytes)  to packet
 bool Client_Packet::addUint16(uint16_t value, uint16_t startPos) 
 {
-	Buffer.at(startPos) = uint8_t(value);
-	Buffer.at(startPos+1) = uint8_t(value >> 8);
+	Buffer.at(startPos) = uint8_t(value >> 8);
+	Buffer.at(startPos+1) = uint8_t(value);
 
 	return true;
 }
 
-bool Client_Packet::addDeque(std::vector<uint8_t*> *deq, int size, uint16_t startPos)
+bool Client_Packet::addVector(std::vector<uint8_t*> *vec, int size, uint16_t startPos)
 {
-	if(Buffer.size() + (*deq).size() <= Buffer.max_size())
+	//TODO check buffer sizes
+	/*if(Buffer.size() + size >= Buffer.max_size())
 	{
+		printf("Vector length: %d, Buffer length: %d\n", (*vec).size(), Buffer.size());
 		return false;
-	}
-	memcpy(&Buffer[startPos] , &deq, size);
+	}*/
+	memcpy(&Buffer[startPos] , &vec, size);
+	
 	return true;
 }
 

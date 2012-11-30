@@ -15,7 +15,7 @@ public:
 	bool Client_Packet::addUint8(uint8_t value, uint16_t pos);
 	bool Client_Packet::addUint16(uint16_t);
 	bool Client_Packet::addUint16(uint16_t, uint16_t startPos);
-	bool Client_Packet::addDeque(std::vector<uint8_t*> *deq, int size, uint16_t startPos);
+	bool Client_Packet::addVector(std::vector<uint8_t*> *vec, int size, uint16_t startPos);
 	std::vector<uint8_t> Client_Packet::getBuffer(void);
 private:
 	std::vector<uint8_t> Client_Packet::Buffer;

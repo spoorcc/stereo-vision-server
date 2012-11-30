@@ -34,14 +34,11 @@ void Client_Connection::sendPacket(Client_Packet& packet)
 	socket_.send_to(boost::asio::buffer(packet.getBuffer()), remote_endpoint, 0, ignored_error);
 }
 
-string Client_Connection::read(boost::array<uint8_t, Client_Connection::PACKET_MAXSIZE>& msg)
+string Client_Connection::read(std::vector<uint8_t>& msg)
 {
 	try
 	{
 		udp::endpoint sender_endpoint;
-
-		printf("Start Receiving...\n");
-
 		size_t len = socket_.receive_from(boost::asio::buffer(msg), sender_endpoint);
 		string currentClient = sender_endpoint.address().to_v4().to_string();
 		return currentClient;

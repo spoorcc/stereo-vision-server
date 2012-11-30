@@ -88,7 +88,8 @@ namespace clientServerProtocol
 
     namespace imageData{
 
-        enum image_data_bytes{ IMAGETYPE = 0x01,
+        enum image_data_bytes{ DATATYPE = 0x00,
+							   IMAGETYPE = 0x01,
                                STREAMID = 0x02,
                                FRAMEID = 0x03,
                                SLICEINDEX_MSB = 0x04,
@@ -116,7 +117,7 @@ namespace clientServerProtocol
         //IMAGE DATA - TotalSlices
 
         //IMAGE DATA - SliceLength
-        enum sliceLength{ MAX_SLICE_LENGTH = 0x01E8
+        enum sliceLength{ MAX_SLICE_LENGTH = 0x01EA
                         };
 
         //IMAGE DATA - Data bytes

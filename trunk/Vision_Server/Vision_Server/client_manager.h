@@ -1,5 +1,6 @@
 #include "client_connection.h"
 #include <boost\thread.hpp>
+#include <vector>
 
 using namespace boost; 
 
@@ -13,8 +14,10 @@ void dataSender(Client*);
 
 void calculateClientMessagesPerSecond(void);
 
-void handleData(boost::array<uint8_t, Client_Connection::PACKET_MAXSIZE>* bufferArray, Client* client);
+void handleData(std::vector<uint8_t>* bufferArray, string* clientAddress);
 void sendImageData(uint8_t, uint8_t, uint8_t, Client*);
 void sendFrame(uint8_t imageType, uint8_t imageStream, uint8_t currentFrame, Client* client);
 
 void fillListWithRandomData(std::vector<uint8_t*> dataList);
+
+Client* getClient(string* clientAddress);

@@ -7,12 +7,14 @@ std::list<Client*> clients;
 std::vector<uint8_t*> testImageData;
 
 using namespace clientServerProtocol;
+using namespace imageData;
+using namespace std;
 
 void startClientManager(void)
 {
 	//TODO
 	printf("[Client Manager] Client Manager started.\n");
-	testImageData.resize(3000);
+	testImageData.resize(10000);
 	fillListWithRandomData(testImageData);
 	printf("[Client Manager] Image data filled with random data.\n");
 
@@ -48,7 +50,7 @@ void dataSender(Client* client)
 		{
 			//Send packets and pop the first one
 			client->Lock();
-			connection.sendPacket(client->buffer.front());
+			connection.sendPacket(*client->buffer.front());
 			client->buffer.pop_front();
 			client->Unlock();
 			messagesClientSentCount++;
@@ -58,51 +60,37 @@ void dataSender(Client* client)
 
 void receiveDataFromClient(void)
 {
-	printf("[Client Manager] start reading data\n");
+	printf("[Client Manager] Start receiving data...\n");
 
 	Client_Connection connection(client_io_service, true, "");
 	
 	//Creating the buffer before the loop, otherwise it takes extremely much processing time
-	boost::array<uint8_t, connection.PACKET_MAXSIZE> bufferArray = {};
+	std::vector<uint8_t> bufferArray (500);
 	
 	for(;;)
 	{
-		//Listen and return the client IP
-		bufferArray.empty();
+		//Clear and reassign 500 bytes
+		bufferArray.assign(500, NULL);
 
+		//Listen and return the client IP
 		string currentClientAddress = connection.read(bufferArray);
 		
+		
 		messagesClientReceivedCount++;
-		//Check if client exists, else create new client
-		bool isNewClient = true;
+		
 
-		cout << currentClientAddress << ": " << "\n" ;
-
-		Client* currentClient = NULL;
-		for each(Client* client in clients)
-		{
-			if(client->ipAddress.compare(currentClientAddress) == 0)
-			{
-				isNewClient = false;
-				currentClient = client;
-			}
-		}
-
-		if(isNewClient)
-		{
-			Client* newClient = new Client(currentClientAddress);
-			clients.push_back(newClient);
-			thread thread_send = thread(dataSender, newClient);
-			currentClient = newClient;
-		}
-
-		//TODO incoming data handlen in andere thread
-		handleData(&bufferArray, currentClient);
+		//TODO Check speed for creating this thread, maybe make a queue?
+		boost::thread handleDataThread = thread(handleData, &bufferArray, &currentClientAddress);
 	}
 }
 
-void handleData(boost::array<uint8_t, Client_Connection::PACKET_MAXSIZE>* bufferArray, Client* client)
+void handleData(std::vector<uint8_t>* bufferArray, string* clientAddress)
 {
+	//TODO Printf
+	cout << *clientAddress << ": " << "\n" ;
+	
+	Client* client = getClient(clientAddress);
+	
 	switch(bufferArray->at(0))
 	{
 	case GET_IMAGE:
@@ -113,9 +101,27 @@ void handleData(boost::array<uint8_t, Client_Connection::PACKET_MAXSIZE>* buffer
 			break;
 		}
 	default:
-		printf("Wrong datatype received!\n");
+		printf("[Client Manager] Wrong datatype received! datatype: %d\n", bufferArray->at(0));
 		break;
 	}
+}
+
+Client* getClient(string* clientAddress)
+{
+	//Check if client exists, else create new client
+	for each(Client* client in clients)
+	{
+		if(client->ipAddress.compare(*clientAddress) == 0)
+		{
+			return client;
+		}
+	}
+
+	Client* newClient = new Client(*clientAddress);
+	clients.push_back(newClient);
+	boost::thread thread_send = thread(dataSender, newClient);
+
+	return newClient;
 }
 
 void sendImageData(uint8_t imageType, uint8_t imageStream, uint8_t stream, Client* client)
@@ -129,6 +135,8 @@ void sendImageData(uint8_t imageType, uint8_t imageStream, uint8_t stream, Clien
 			{
 				sendFrame(imageType, imageStream, frame, client);
 			}
+
+			//TODO break when client is disconnected
 		}
 	}
 	else
@@ -140,7 +148,7 @@ void sendImageData(uint8_t imageType, uint8_t imageStream, uint8_t stream, Clien
 
 void sendFrame(uint8_t imageType, uint8_t imageStream, uint8_t currentFrame, Client* client)
 {
-	Client_Packet packet = Client_Packet(0);
+	
 
 	//Send one full frame
 	uint16_t currentSlice = 1;
@@ -164,23 +172,24 @@ void sendFrame(uint8_t imageType, uint8_t imageStream, uint8_t currentFrame, Cli
 
 		int totalPacketSize = currentSliceSize + 10; //TODO counting the numbers of possible headers (byte 0 - 9)
 
-		packet = Client_Packet(totalPacketSize);
+		//Create new packet
+		Client_Packet packet = Client_Packet(totalPacketSize);
 
 		//Beginning of protocol image data	
-		packet.addUint8(IMAGE_DATA, 0);
-		packet.addUint8(imageType, 1);	
-		packet.addUint8(imageStream, 2);
-		packet.addUint8(currentFrame, 3);	
-		packet.addUint16(currentSlice, 4);	
-		packet.addUint16(totalSlices, 6);	
-		packet.addUint16(currentSliceSize, 8); 
+		packet.addUint8(IMAGE_DATA, DATATYPE);
+		packet.addUint8(imageType, IMAGETYPE);	
+		packet.addUint8(imageStream, STREAMID);
+		packet.addUint8(currentFrame, FRAMEID);	
+		packet.addUint16(currentSlice, SLICEINDEX_MSB);	
+		packet.addUint16(totalSlices, TOTALSLICES_MSB);	
+		packet.addUint16(currentSliceSize, SLICELENGTH_MSB); 
 
 		//Add every char to the packet.
-		packet.addDeque(&testImageData, currentSliceSize, 10);
+		packet.addVector(&testImageData, currentSliceSize, 10);
 
 		//Send packet and reset packet
+		//TODO copy packet to buffer
 		client->QueuePacket(&packet);
-
 	}
 }
 
@@ -188,6 +197,7 @@ void fillListWithRandomData(std::vector<uint8_t*> dataList)
 {
 	for(uint16_t i = 0; i < dataList.size(); i++)
 	{
-		dataList.at(i) = new uint8_t(std::rand() % 256);
+		//dataList.at(i) = new uint8_t(std::rand() % 256);
+		dataList.at(i) = new uint8_t(i);
 	}
 }
