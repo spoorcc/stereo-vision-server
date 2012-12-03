@@ -26,7 +26,7 @@ uint8_t Client_Packet::readUint8(uint16_t pos)
 //Read uint16 (2 bytes) from to packet
 uint16_t Client_Packet::readUint16(uint16_t pos) 
 {
-	uint16_t v = uint16_t(uint16_t(Buffer[pos]) | (uint16_t(Buffer[pos+1]) << 8));
+	uint16_t v = uint16_t((uint16_t(Buffer[pos+1]) << 8) | uint16_t(Buffer[pos]));
 	return v;
 }
 

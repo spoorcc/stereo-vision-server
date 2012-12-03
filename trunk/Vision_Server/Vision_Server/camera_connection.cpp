@@ -108,5 +108,6 @@ bool Camera_Connection::receivePacket(void){
             if ( (i % LINE_LEN) == 0) printf("\n");
         }*/
 //	}
+	return false;
 }
 

@@ -37,10 +37,10 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>C:\Program Files\boost\boost_1_51\;C:\Users\Nick\Documents\Visual Studio 2010\Projects\OpenCV2.1\include\opencv;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Program Files\boost\boost_1_51\;C:\Users\Nick\Documents\Visual Studio 2010\Projects\OpenCV2.1\include\opencv;C:\OpenCV2.2\include\opencv;C:\OpenCV2.2\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <LibraryPath>C:\Program Files\boost\boost_1_51\lib;C:\Users\Nick\Documents\Visual Studio 2010\Projects\OpenCV2.1\lib;$(LibraryPath)</LibraryPath>
+    <LibraryPath>C:\Program Files\boost\boost_1_51\lib;C:\Users\Nick\Documents\Visual Studio 2010\Projects\OpenCV2.1\lib;C:\OpenCV2.2\lib;$(LibraryPath)</LibraryPath>
     <SourcePath>C:\Users\Nick\Documents\Visual Studio 2010\Projects\OpenCV2.1\src\cv;C:\Users\Nick\Documents\Visual Studio 2010\Projects\OpenCV2.1\src\cvaux;C:\Users\Nick\Documents\Visual Studio 2010\Projects\OpenCV2.1\src\cxcore;C:\Users\Nick\Documents\Visual Studio 2010\Projects\OpenCV2.1\src\highgui;C:\Users\Nick\Documents\Visual Studio 2010\Projects\OpenCV2.1\src\ml;$(SourcePath)</SourcePath>
     <ExecutablePath>C:\Program Files\boost\boost_1_51_0;$(ExecutablePath)</ExecutablePath>
   </PropertyGroup>
@@ -53,9 +53,9 @@
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>cv210.lib;cxcore210.lib;highgui210.lib;wpcap.lib;Packet.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opencv_core220d.lib;opencv_highgui220d.lib;opencv_video220d.lib;opencv_ml220d.lib;opencv_legacy220d.lib;opencv_imgproc220d.lib;wpcap.lib;Packet.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
-      <AdditionalLibraryDirectories>C:\Users\Nick\Dropbox\TUTORMED_StereoVision\Server\WpdPack\Lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\Users\Nick\Dropbox\TUTORMED_StereoVision\Server\WpdPack\Lib;C:\OpenCV2.2\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">

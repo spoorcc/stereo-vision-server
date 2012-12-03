@@ -126,7 +126,7 @@ Client* getClient(string* clientAddress)
 
 void sendImageData(uint8_t imageType, uint8_t imageStream, uint8_t stream, Client* client)
 {
-	if(stream == true){
+	if(stream != 0){
 		//Endless Stream
 		for(;;)
 		{
@@ -148,11 +148,9 @@ void sendImageData(uint8_t imageType, uint8_t imageStream, uint8_t stream, Clien
 
 void sendFrame(uint8_t imageType, uint8_t imageStream, uint8_t currentFrame, Client* client)
 {
-	
-
 	//Send one full frame
 	uint16_t currentSlice = 1;
-	uint16_t totalSlices = ceil((double)testImageData.size() / imageData::MAX_SLICE_LENGTH);
+	uint16_t totalSlices = (uint16_t) ceil((double)testImageData.size() / imageData::MAX_SLICE_LENGTH);
 	uint16_t lastSliceSize = testImageData.size() % imageData::MAX_SLICE_LENGTH;
 			
 	//When the lastSliceSize results zero, it actually means the data of the last slice is exactly 500 bytes

@@ -5,11 +5,12 @@
 #include <sstream>
 #include <boost/thread.hpp>
 
+#include "graphics_manager.h"
+
 using namespace std;
 using namespace boost; 
 
 void startCameraManager(void);
-void startGraphicsManager(void);
 void startClientManager(void);
 
 void main()
@@ -19,9 +20,11 @@ void main()
 	cout <<	"----------------------------------\n";
 
 	cout << "[Main Server] Main server started\n";
-   
-	//thread thread_2 = thread(startGraphicsManager);
-	thread thread_3 = thread(startClientManager);
+	
+	//Graphics_Manager gMan = Graphics_Manager();
+	
+	//thread thread_3 = thread(startClientManager);
+	boost::thread thread_2 = boost::thread(startGraphicsManager);
 	//thread thread_1 = thread(startCameraManager);
 
 	for(;;)
