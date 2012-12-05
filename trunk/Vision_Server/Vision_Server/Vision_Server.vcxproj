@@ -37,25 +37,25 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>C:\Program Files\boost\boost_1_51\;C:\Users\Nick\Documents\Visual Studio 2010\Projects\OpenCV2.1\include\opencv;C:\OpenCV2.2\include\opencv;C:\OpenCV2.2\include;$(IncludePath)</IncludePath>
+    <IncludePath>$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <LibraryPath>C:\Program Files\boost\boost_1_51\lib;C:\Users\Nick\Documents\Visual Studio 2010\Projects\OpenCV2.1\lib;C:\OpenCV2.2\lib;$(LibraryPath)</LibraryPath>
-    <SourcePath>C:\Users\Nick\Documents\Visual Studio 2010\Projects\OpenCV2.1\src\cv;C:\Users\Nick\Documents\Visual Studio 2010\Projects\OpenCV2.1\src\cvaux;C:\Users\Nick\Documents\Visual Studio 2010\Projects\OpenCV2.1\src\cxcore;C:\Users\Nick\Documents\Visual Studio 2010\Projects\OpenCV2.1\src\highgui;C:\Users\Nick\Documents\Visual Studio 2010\Projects\OpenCV2.1\src\ml;$(SourcePath)</SourcePath>
-    <ExecutablePath>C:\Program Files\boost\boost_1_51_0;$(ExecutablePath)</ExecutablePath>
+    <LibraryPath>$(LibraryPath)</LibraryPath>
+    <SourcePath>$(SourcePath)</SourcePath>
+    <ExecutablePath>$(ExecutablePath)</ExecutablePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>C:\Users\Nick\Dropbox\TUTORMED_StereoVision\Server\WpdPack\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;WPCAP;HAVE_REMOTE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>opencv_core220d.lib;opencv_highgui220d.lib;opencv_video220d.lib;opencv_ml220d.lib;opencv_legacy220d.lib;opencv_imgproc220d.lib;wpcap.lib;Packet.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
-      <AdditionalLibraryDirectories>C:\Users\Nick\Dropbox\TUTORMED_StereoVision\Server\WpdPack\Lib;C:\OpenCV2.2\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">

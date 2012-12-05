@@ -1,3 +1,6 @@
+#ifndef CLIENT_PACKET_H
+#define CLIENT_PACKET_H
+
 #include <stdint.h>
 #include <iostream>
 #include <vector>
@@ -19,3 +22,5 @@ public:
 private:
 	std::vector<uint8_t> Client_Packet::Buffer;
 };
+
+#endif

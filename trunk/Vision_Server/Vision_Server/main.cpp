@@ -1,17 +1,9 @@
-#include <sdkddkver.h>
-#include <conio.h>
-#include <stdio.h>
-#include <string>
-#include <sstream>
-#include <boost/thread.hpp>
-
+#include "client_manager.h"
 #include "graphics_manager.h"
+#include "camera_manager.h"
 
 using namespace std;
 using namespace boost; 
-
-void startCameraManager(void);
-void startClientManager(void);
 
 void main()
 {
@@ -21,11 +13,9 @@ void main()
 
 	cout << "[Main Server] Main server started\n";
 	
-	//Graphics_Manager gMan = Graphics_Manager();
-	
-	//thread thread_3 = thread(startClientManager);
-	boost::thread thread_2 = boost::thread(startGraphicsManager);
-	//thread thread_1 = thread(startCameraManager);
+	Graphics_Manager grMan = Graphics_Manager();
+	Client_Manager clMan = Client_Manager();
+	Camera_Manager camMan = Camera_Manager();
 
 	for(;;)
 	{

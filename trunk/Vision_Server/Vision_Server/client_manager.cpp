@@ -3,14 +3,20 @@
 uint32_t messagesClientReceivedCount = 0;
 uint32_t messagesClientSentCount = 0;
 
-std::list<Client*> clients;
-std::vector<uint8_t*> testImageData;
-
 using namespace clientServerProtocol;
 using namespace imageData;
 using namespace std;
 
-void startClientManager(void)
+std::list<Client*> clients;
+std::vector<uint8_t*> testImageData;
+Client_Connection connection = Client_Connection::Client_Connection(CLIENT_PORT);
+
+Client_Manager::Client_Manager(void)
+{
+	boost::thread thread_1 = boost::thread(&Client_Manager::startClientManager, this);
+}
+
+void Client_Manager::startClientManager(void)
 {
 	//TODO
 	printf("[Client Manager] Client Manager started.\n");
@@ -18,8 +24,8 @@ void startClientManager(void)
 	fillListWithRandomData(testImageData);
 	printf("[Client Manager] Image data filled with random data.\n");
 
-	thread thread_receive = thread(receiveDataFromClient);
-	thread thread_calc = thread(calculateClientMessagesPerSecond);
+	boost::thread thread_receive = boost::thread(boost::bind(&Client_Manager::receiveDataFromClient,this));
+	boost::thread thread_calc = boost::thread(boost::bind(&Client_Manager::calculateClientMessagesPerSecond,this));
 
 	for(;;)
 	{
@@ -28,7 +34,7 @@ void startClientManager(void)
 	}
 }
 
-void calculateClientMessagesPerSecond(void)
+void Client_Manager::calculateClientMessagesPerSecond(void)
 {
 	for(;;){
 		boost::this_thread::sleep(boost::posix_time::milliseconds(1000));
@@ -38,11 +44,10 @@ void calculateClientMessagesPerSecond(void)
 	}
 }
 
-void dataSender(Client* client)
+void Client_Manager::dataSender(Client* client)
 {
 	printf("[Client Manager] start sending data\n");
 	cout << client->ipAddress;
-	Client_Connection connection(client_io_service, false, client->ipAddress);
 
 	for(;;)
 	{
@@ -50,19 +55,19 @@ void dataSender(Client* client)
 		{
 			//Send packets and pop the first one
 			client->Lock();
-			connection.sendPacket(*client->buffer.front());
-			client->buffer.pop_front();
+			if(connection.sendPacket(*client->buffer.front(), client->remote_endpoint) == true)
+			{
+				client->buffer.pop_front();
+				messagesClientSentCount++;
+			}
 			client->Unlock();
-			messagesClientSentCount++;
 		}
 	}
 }
 
-void receiveDataFromClient(void)
+void Client_Manager::receiveDataFromClient(void)
 {
 	printf("[Client Manager] Start receiving data...\n");
-
-	Client_Connection connection(client_io_service, true, "");
 	
 	//Creating the buffer before the loop, otherwise it takes extremely much processing time
 	std::vector<uint8_t> bufferArray (500);
@@ -75,16 +80,14 @@ void receiveDataFromClient(void)
 		//Listen and return the client IP
 		string currentClientAddress = connection.read(bufferArray);
 		
-		
 		messagesClientReceivedCount++;
-		
 
 		//TODO Check speed for creating this thread, maybe make a queue?
-		boost::thread handleDataThread = thread(handleData, &bufferArray, &currentClientAddress);
+		boost::thread handleDataThread = thread(&Client_Manager::handleData, this, &bufferArray, &currentClientAddress);
 	}
 }
 
-void handleData(std::vector<uint8_t>* bufferArray, string* clientAddress)
+void Client_Manager::handleData(std::vector<uint8_t>* bufferArray, string* clientAddress)
 {
 	//TODO Printf
 	cout << *clientAddress << ": " << "\n" ;
@@ -97,7 +100,7 @@ void handleData(std::vector<uint8_t>* bufferArray, string* clientAddress)
 		{
 			uint8_t imageType = bufferArray->at(1);
 			uint8_t stream = bufferArray->at(2);
-			thread thread_handleImages = thread(sendImageData, imageType, stream, bufferArray->at(3), client);
+			thread thread_handleImages = thread(&Client_Manager::sendImageData, this, imageType, stream, bufferArray->at(3), client);
 			break;
 		}
 	default:
@@ -106,7 +109,7 @@ void handleData(std::vector<uint8_t>* bufferArray, string* clientAddress)
 	}
 }
 
-Client* getClient(string* clientAddress)
+Client* Client_Manager::getClient(string* clientAddress)
 {
 	//Check if client exists, else create new client
 	for each(Client* client in clients)
@@ -117,14 +120,15 @@ Client* getClient(string* clientAddress)
 		}
 	}
 
-	Client* newClient = new Client(*clientAddress);
+	Client* newClient = new Client(*clientAddress, CLIENT_PORT);
 	clients.push_back(newClient);
-	boost::thread thread_send = thread(dataSender, newClient);
+	//Start new thread to handle new client
+	boost::thread thread_send = thread(&Client_Manager::dataSender, this, newClient);
 
 	return newClient;
 }
 
-void sendImageData(uint8_t imageType, uint8_t imageStream, uint8_t stream, Client* client)
+void Client_Manager::sendImageData(uint8_t imageType, uint8_t imageStream, uint8_t stream, Client* client)
 {
 	if(stream != 0){
 		//Endless Stream
@@ -146,7 +150,7 @@ void sendImageData(uint8_t imageType, uint8_t imageStream, uint8_t stream, Clien
 	}
 }
 
-void sendFrame(uint8_t imageType, uint8_t imageStream, uint8_t currentFrame, Client* client)
+void Client_Manager::sendFrame(uint8_t imageType, uint8_t imageStream, uint8_t currentFrame, Client* client)
 {
 	//Send one full frame
 	uint16_t currentSlice = 1;
@@ -191,7 +195,7 @@ void sendFrame(uint8_t imageType, uint8_t imageStream, uint8_t currentFrame, Cli
 	}
 }
 
-void fillListWithRandomData(std::vector<uint8_t*> dataList)
+void Client_Manager::fillListWithRandomData(std::vector<uint8_t*> dataList)
 {
 	for(uint16_t i = 0; i < dataList.size(); i++)
 	{

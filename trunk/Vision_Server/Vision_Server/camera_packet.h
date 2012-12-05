@@ -1,3 +1,6 @@
+#ifndef CAMERA_PACKET_H
+#define CAMERA_PACKET_H
+
 #include <string>
 #include <stdint.h>
 #include <iostream>
@@ -23,3 +26,4 @@ private:
 	uint16_t Camera_Packet::MsgSize;
 	uint8_t	Camera_Packet::Buffer[Camera_Packet::PACKET_MAXSIZE]; 
 };
+#endif

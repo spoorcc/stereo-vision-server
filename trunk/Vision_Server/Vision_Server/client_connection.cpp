@@ -1,26 +1,19 @@
 #include "client_connection.h"
 
-#define Client_port 49679
-
 using namespace std;
+using namespace boost;
 
-Client_Connection::Client_Connection(boost::asio::io_service& io_service, bool listen, string Client_ip) : socket_(io_service) 
+boost::asio::io_service client_io_service;
+
+Client_Connection::Client_Connection(int port) : socket_(client_io_service) 
 {
 	try{
 		//Open send socket
 		socket_.open(udp::v4());
 
-		//bind retreive socket
-		if(listen)
-		{
-			//udp::endpoint local_endpoint = udp::endpoint(boost::asio::ip::address::from_string(Local_ip), Client_port);
-			udp::endpoint local_endpoint = udp::endpoint(boost::asio::ip::address_v4::any(), Client_port);
-			socket_.bind(local_endpoint);
-		}
-		else
-		{
-			remote_endpoint = boost::asio::ip::udp::endpoint(boost::asio::ip::address::from_string(Client_ip),  Client_port);
-		}
+		//Bind to the port
+		local_endpoint = udp::endpoint(boost::asio::ip::address_v4::any(), port);
+		socket_.bind(local_endpoint);
 	}
 	catch (std::exception& e)
 	{
@@ -28,10 +21,18 @@ Client_Connection::Client_Connection(boost::asio::io_service& io_service, bool l
 	}
 }
 
-void Client_Connection::sendPacket(Client_Packet& packet)
+bool Client_Connection::sendPacket(Client_Packet& packet, udp::endpoint remote_endpoint)
 {
-	//socket_.async_send_to(packet.getBuffer(), remote_endpoint, 0, ignored_error);
-	socket_.send_to(boost::asio::buffer(packet.getBuffer()), remote_endpoint, 0, ignored_error);
+	try
+	{
+		socket_.send_to(boost::asio::buffer(packet.getBuffer()), remote_endpoint, 0, ignored_error);
+		return true;
+	}
+	catch (std::exception& e)
+	{
+		std::cerr << e.what() << std::endl;
+		return false;
+	}
 }
 
 string Client_Connection::read(std::vector<uint8_t>& msg)

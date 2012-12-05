@@ -1,8 +1,9 @@
 #include "client.h"
 
-Client::Client(std::string ip)
+Client::Client(std::string ip, int port)
 {
 	ipAddress = ip;
+	remote_endpoint = boost::asio::ip::udp::endpoint(boost::asio::ip::address::from_string(ip), port);
 }
 
 void Client::QueuePacket(Client_Packet* packet)

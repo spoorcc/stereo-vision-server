@@ -1,10 +1,13 @@
+#ifndef CAMERA_CONNECTION_H
+#define CAMERA_CONNECTION_H
+
+#include <pcap.h>
 #include <iostream>
 #include <stdlib.h>
 #include <stdio.h>
 #include <string>
-#include <pcap.h>
 
-#include "camera_packet.h"
+#include "packet_receiver.h"
 
 #define LINE_LEN 16
 
@@ -25,8 +28,6 @@ private:
 	int res;
 	struct pcap_pkthdr *header;
 	const u_char *pkt_data;
-
-	
-
 };
+#endif /* CAMERA_CONNECTION_H */
 

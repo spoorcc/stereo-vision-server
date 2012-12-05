@@ -3,37 +3,30 @@
 using namespace std;
 using namespace boost; 
 
-//Constants
-#define CAM_CONFIG		 0x80
-#define PROCES_CONFIG	 0x90
-#define CALLIB_DATA		 0xA0
-#define RAW_RGB_DATA	 0xB0
-#define FILLED_UP_DATA	 0xC0
-#define EQUALIZED_DATA	 0xD0
-#define RECTIFIED_DATA	 0xE0
-#define CORRESPONDENCE	 0xF0
-#define READ				true
-#define WRITE				false
-
 uint32_t messagesReceivedCount = 0;
 uint32_t messagesSentCount = 0;
 
 Camera_Connection connection;
 
-void startCameraManager(void)
+Camera_Manager::Camera_Manager(void)
+{
+	boost::thread t = boost::thread(&Camera_Manager::startCameraManager,this);
+}
+
+void Camera_Manager::startCameraManager(void)
 {
 	cout << "[Camera Manager] Camera Manager started\n";
 	connection.chooseEthernetCard();
-	thread thread_sendData		= thread(sendDataToCamera);
-	thread thread_receiveData	= thread(receiveDataFromCamera);
-	thread thread_calMesPS		= thread(calculateMessagesPerSecond);
+	boost::thread thread_sendData		= boost::thread(&Camera_Manager::sendDataToCamera,this);
+	boost::thread thread_receiveData	= boost::thread(&Camera_Manager::receiveDataFromCamera,this);
+	boost::thread thread_calMesPS		= boost::thread(&Camera_Manager::calculateMessagesPerSecond,this);
 	for(;;)
 	{
 		boost::this_thread::sleep(boost::posix_time::milliseconds(1000)); 
 	}
 }
 
-void receiveDataFromCamera(void)
+void Camera_Manager::receiveDataFromCamera(void)
 {
 	while(1)
 	{
@@ -44,7 +37,7 @@ void receiveDataFromCamera(void)
 	}
 }
 
-void calculateMessagesPerSecond(void)
+void Camera_Manager::calculateMessagesPerSecond(void)
 {
 	for(;;)
 	{
@@ -55,7 +48,7 @@ void calculateMessagesPerSecond(void)
 	}
 }
 
-void sendDataToCamera(void)
+void Camera_Manager::sendDataToCamera(void)
 {	
 	Camera_Packet packet = Camera_Packet();
 	packet.changeAllHeaders(0xB0, 0x0b0b, true);
@@ -74,6 +67,6 @@ void sendDataToCamera(void)
 	}
 }
 
-void showImage(void)
+void Camera_Manager::showImage(void)
 {
 }

@@ -1,3 +1,6 @@
+#ifndef PACKET_RECEIVER_H
+#define PACKET_RECEIVER_H
+
 #include <conio.h>
 #include <stdio.h>
 #include <stdint.h>
@@ -6,6 +9,8 @@
 #include <highgui.h>
 #include <cv.h>
 #include <boost/array.hpp>
+
+#include "camera_packet.h"
 
 #define BUFFER_SIZE		260
 #define FILL_UP_PIXEL_SIZE 921600
@@ -30,3 +35,5 @@ void filled_up_data(boost::array<uint8_t, BUFFER_SIZE> bufferArray);
 void equalized_data(void);
 void rectified_data(void);
 void correspondence(void);
+
+#endif /* PACKET_RECEIVER_H */

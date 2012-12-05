@@ -2,13 +2,14 @@
 
 using namespace std;
 using namespace cv;
+using namespace boost;
 
-/*Graphics_Manager::Graphics_Manager(void)
+Graphics_Manager::Graphics_Manager(void)
 {
-	boost::thread t = boost::thread(Graphics_Manager::startGraphicsManager);
-}*/
+	boost::thread t = boost::thread(&Graphics_Manager::startGraphicsManager,this);
+}
 
-void startGraphicsManager(void)
+void Graphics_Manager::startGraphicsManager(void)
 {
 	/*
 	cv::Mat testImage = cv::imread("test.jpg", CV_LOAD_IMAGE_COLOR);
@@ -18,8 +19,6 @@ void startGraphicsManager(void)
         return;
     }	
 	*/
-
-
 	vector<int> params;
 	params.push_back(CV_IMWRITE_JPEG_QUALITY);
 	params.push_back(10);
