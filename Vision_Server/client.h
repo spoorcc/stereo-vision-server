@@ -12,23 +12,23 @@
 #include <qstring.h>
 #include <qqueue.h>
 
-#include "client_send_socket.h"
 #include "client_data_sender.h"
 
 class Client : public QObject
 {
     Q_OBJECT
 public:
-    explicit Client(QObject *parent, QString ip, int port);
+    explicit Client(QObject *parent, QHostAddress hostAddr, int port);
 	//Functions
 	void Lock(void);
 	void Unlock(void);
     QString getIp(void);
+    QHostAddress getHostAddress(void);
     void QueuePacket(Client_Packet*);
-public slots:
-    void handleBuffer();
+    Client_Data_Sender* getSender(void);
 private:
-	QString ipAddress;
+    Client_Data_Sender* dataSender;
+    QHostAddress hostAddress;
 signals:
     void    handleSendBuffer();
     void    newPacket(Client_Packet*);

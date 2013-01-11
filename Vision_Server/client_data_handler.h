@@ -21,7 +21,7 @@ class Client_Data_Handler : public QObject
 public:
     explicit Client_Data_Handler(QObject *parent = 0);
 signals:
-	void	queueFrame(uint8_t currentFrame, uint8_t imgType, uint8_t imgStream, uint8_t strm, Client* cl);
+    void	newImageDataRequest(QHostAddress clientAddress, uint8_t imgType, uint8_t imgStream, uint8_t stream);
 public slots:
     void processDatagram(QByteArray*, QHostAddress);
 };

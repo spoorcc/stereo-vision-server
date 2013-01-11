@@ -26,9 +26,9 @@ signals:
 	void	clientInformation(Client*);
     void    updateCount();
 private:
-    Message_Counter         msgCounter;
+    Message_Counter*         msgCounter;
     Client_Data_Receiver    dataReceiver;
-    Client_Image_Data_Queuer imgDataQueuer;
+    Client_Image_Data_Queuer* imgDataQueuer;
     Client_Data_Handler     clientDataHandler;
 	void	receiveDataFromClient(void);
 	void	handleData(std::vector<uint8_t>* bufferArray, QString* clientAddress);

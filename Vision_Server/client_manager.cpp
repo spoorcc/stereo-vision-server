@@ -4,12 +4,15 @@ Client_Manager::Client_Manager(QObject *parent) : QObject(parent)
 {
 	printf("[Client Manager] Client Manager started.\n");
 
-    this->connect(&imgDataQueuer, SIGNAL(noClientFound(QHostAddress*)), this, SLOT(createNewClient(QHostAddress*)));
+    imgDataQueuer = new Client_Image_Data_Queuer(&clients, this);
 
-    msgCounter.connect(&dataReceiver, SIGNAL(addReceivedCount()), &msgCounter, SLOT(countReceivedUp()));
-    msgCounter.connect(this, SIGNAL(updateCount()), SLOT(printMessages()));
+    this->connect(imgDataQueuer, SIGNAL( noClientFound(QHostAddress*) ), this, SLOT( createNewClient(QHostAddress*) ));
 
-    clientDataHandler.connect(dataReceiver.getConnection(), SIGNAL( newDataReceived(QByteArray*, QHostAddress) ), &clientDataHandler, SLOT( processDatagram(QByteArray*, QHostAddress) ) );
+    msgCounter = new Message_Counter(this);
+    msgCounter->connect(&dataReceiver, SIGNAL( addReceivedCount() ), SLOT( countReceivedUp() ));
+
+    imgDataQueuer->connect(&clientDataHandler, SIGNAL( newImageDataRequest(QHostAddress,uint8_t,uint8_t,uint8_t) ), SLOT( handleImageData(QHostAddress,uint8_t,uint8_t,uint8_t) ));
+    clientDataHandler.connect(dataReceiver.getConnection(), SIGNAL( newDataReceived(QByteArray*, QHostAddress) ), SLOT( processDatagram(QByteArray*, QHostAddress) ) );
 }
 
 void Client_Manager::fillListWithRandomData(std::vector<uint8_t*> dataList)
@@ -33,12 +36,13 @@ void Client_Manager::createNewClient(QHostAddress* clientAddress)
 		}
 	}
 
-    Client* newClient = new Client(this, (*clientAddress).toString(), CLIENT_PORT);
+    qDebug() << "[Client Manager] Creating new client";
+    Client* newClient = new Client(this, *clientAddress, CLIENT_PORT);
 
 	clients.push_back(newClient);
 
 	//TODO Fix the msgCounter
-    //msgCounter.connect(&clientDataSender, SIGNAL(addSentCount()), SLOT(addSentCount()));
+    msgCounter->connect(newClient->getSender(), SIGNAL(addSentCount()), SLOT(countSendUp()));
 
     return;
 }

@@ -1,20 +1,14 @@
 #include "client.h"
 
-Client::Client(QObject *parent, QString ip, int port) : QObject(parent)
+Client::Client(QObject *parent, QHostAddress hostAddr, int port) : QObject(parent)
 {
-    Client_Data_Sender dataSender(this);
+    hostAddress = hostAddr;
+    \
+    dataSender = new Client_Data_Sender(this);
+    dataSender->connectToClient(getHostAddress(), port);
 
-    dataSender.connectToClient(QHostAddress(ip), port);
-
-    connect(this, SIGNAL(handleSendBuffer()), &dataSender, SLOT(handleSendBuffer()));
-    connect(this, SIGNAL(newPacket(Client_Packet*)), &dataSender, SLOT(QueuePacket(Client_Packet*)));
-
-    this->setObjectName(ip);
-}
-
-void Client::handleBuffer()
-{
-    emit handleSendBuffer();
+    connect(this, SIGNAL(handleSendBuffer()), dataSender, SLOT(handleSendBuffer()));
+    connect(this, SIGNAL(newPacket(Client_Packet*)), dataSender, SLOT(QueuePacket(Client_Packet*)));
 }
 
 void Client::Lock(void)
@@ -31,10 +25,22 @@ void Client::Unlock(void)
 
 QString Client::getIp()
 {
-	return ipAddress;
+    return hostAddress.toString();
+}
+
+QHostAddress Client::getHostAddress(void)
+{
+    return hostAddress;
 }
 
 void Client::QueuePacket(Client_Packet* packet)
 {
+    qDebug() << "[Client] Queue Packet";
     emit newPacket(packet);
+    emit handleSendBuffer();
+}
+
+Client_Data_Sender* Client::getSender(void)
+{
+    return dataSender;
 }

@@ -3,9 +3,12 @@
 
 #include <QObject>
 #include <QtNetwork/QUdpSocket>
+#include <qmath.h>
 
 #include "client_server_protocol.h"
 #include "client_packet.h"
+
+#define MAX_UDP_MESSAGE_SIZE 512
 
 class Client_Send_Socket : public QUdpSocket
 {
