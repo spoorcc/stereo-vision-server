@@ -12,8 +12,7 @@ class Client_Packet : public QObject
     Q_OBJECT
 public:
     static const int PACKET_MAXSIZE = 500;
-    explicit Client_Packet(QObject *parent, int packet_size);
-    bool canAdd(int size);
+    explicit Client_Packet(QObject *parent = 0);
     uint16_t getMsgSize(void);
     uint8_t readUint8(uint16_t pos);
     uint16_t readUint16(uint16_t pos);
@@ -22,6 +21,8 @@ public:
     bool addUint16(uint16_t);
     bool addUint16(uint16_t, uint16_t startPos);
 	QByteArray* getBuffer(void);
+    void pushFront(QByteArray* buf);
+    void pushBack(QByteArray* buf);
 private:
 	QByteArray Buffer;
 };

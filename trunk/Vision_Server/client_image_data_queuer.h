@@ -3,8 +3,10 @@
 
 #include <QObject>
 #include <QtNetwork/QUdpSocket>
-#include <vector>
+#include <list>
 #include <stdint.h>
+#include <QImage>
+#include <QBuffer>
 
 #include <qmath.h>
 
@@ -19,14 +21,14 @@ class Client_Image_Data_Queuer : public QObject
 {
 	Q_OBJECT
 public:
-    explicit Client_Image_Data_Queuer(QObject *parent = 0);
+    explicit Client_Image_Data_Queuer(std::list<Client*> *clList, QObject *parent = 0);
 public slots:
     void    handleImageData(QHostAddress clientAddress, uint8_t imgType, uint8_t imgStream, uint8_t strm);
 signals:
     void noClientFound(QHostAddress*);
 private:
+    std::list<Client*>* clientList;
     void	queueFrame(Client* client, uint8_t currentFrame, uint8_t imageType, uint8_t imageStream);
 	Client* client;
-    std::vector<uint8_t*> testImageData;
 };
 #endif /*CLIENT_IMAGE_DATA_QUEUER_H_*/

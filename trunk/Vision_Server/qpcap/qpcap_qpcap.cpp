@@ -41,7 +41,6 @@ struct QPcapPrivate
 //
 // Pcap header
 //
-
 QPcapHeader::QPcapHeader( const struct pcap_pkthdr *hdr )
     : header(hdr)
 {

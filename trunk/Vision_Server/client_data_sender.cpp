@@ -33,14 +33,16 @@ void Client_Data_Sender::QueuePacket(Client_Packet* packet)
 
 bool Client_Data_Sender::sendPacket(Client_Packet* packet)
 {
+    qDebug() << "[Client Data Sender] Start sending packet";
 	try
 	{
         connection.writeDataToClient(packet);
+        qDebug() << "[Client Data Sender] Packet sent";
 		return true;
 	}
 	catch (std::exception& e)
 	{
-		std::cerr << e.what() << std::endl;
+        qDebug() << e.what();
 		return false;
 	}
 }

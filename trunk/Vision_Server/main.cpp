@@ -21,7 +21,12 @@ int main(int argc, char *argv[])
 
     //////// Camera Manager
     //QThread camManThread;
-    Camera_Manager camMan(&app);
+
+    //////////////////////////////
+    //Camera Manager
+    //Camera_Manager camMan(&app);
+    //////////////////////////////
+
     //camMan.moveToThread(&camManThread);
     //camManThread.start();
 
@@ -37,10 +42,7 @@ int main(int argc, char *argv[])
     //clMan.moveToThread(&clManThread);
     //clManThread.start();
 
-    QTimer *msgTimer = new QTimer(0);
 
-    clMan.connect(msgTimer, SIGNAL( timeout(void) ), &clMan, SIGNAL(updateCount()));
-    msgTimer->start(1000);
 
     return app.exec();
 }

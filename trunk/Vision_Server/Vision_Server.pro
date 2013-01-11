@@ -6,8 +6,6 @@
 
 QT       += core network
 
-QT       -= gui
-
 TARGET = Vision_Server
 CONFIG   += console
 CONFIG   -= app_bundle
