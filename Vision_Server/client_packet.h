@@ -25,7 +25,7 @@ public:
     void pushBack(QByteArray* buf);
     void setBuffer(QByteArray* buf);
 private:
-    QByteArray* Buffer;
+    QByteArray Buffer;
 };
 
 #endif
