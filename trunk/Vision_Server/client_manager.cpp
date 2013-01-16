@@ -1,10 +1,10 @@
 #include "client_manager.h"
 
-Client_Manager::Client_Manager(QObject *parent) : QObject(parent)
+Client_Manager::Client_Manager(Graphics_Manager* graphMan, QObject *parent) : QObject(parent)
 {
 	printf("[Client Manager] Client Manager started.\n");
 
-    imgDataQueuer = new Client_Image_Data_Queuer(&clients, this);
+    imgDataQueuer = new Client_Image_Data_Queuer(&clients, graphMan, this);
 
     this->connect(imgDataQueuer, SIGNAL( noClientFound(QHostAddress*) ), this, SLOT( createNewClient(QHostAddress*) ));
 

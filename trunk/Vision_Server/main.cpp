@@ -31,18 +31,10 @@ int main(int argc, char *argv[])
     //camManThread.start();
 
     //////// Graphics Manager
-    //QThread graphManThread;
-    //Graphics_Manager graphMan;
-    //graphMan.moveToThread(&graphManThread);
-    //graphManThread.start();
+    Graphics_Manager graphMan(&app);
 
 	//////// Client Manager
-    //QThread clManThread;
-    Client_Manager clMan(&app);
-    //clMan.moveToThread(&clManThread);
-    //clManThread.start();
-
-
+    Client_Manager clMan(&graphMan, &app);
 
     return app.exec();
 }

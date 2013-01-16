@@ -50,8 +50,6 @@ void Client_Send_Socket::writeDataToClient(Client_Packet* packet)
 
         for(count = 0; count < packetCount; count++)
         {
-            qDebug() << "Current count: " << count;
-
             waitForBytesWritten(1000);
 
             done = write(packet->getBuffer()->mid(count * MAX_UDP_MESSAGE_SIZE, MAX_UDP_MESSAGE_SIZE));

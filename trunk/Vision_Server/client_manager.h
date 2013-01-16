@@ -6,6 +6,7 @@
 #include "client_server_protocol.h"
 #include "client_data_sender.h"
 #include "client_image_data_queuer.h"
+#include "graphics_manager.h"
 
 #include <QTimer>
 #include <QDebug>
@@ -17,7 +18,7 @@ class Client_Manager : public QObject
 {
 	Q_OBJECT
 public:
-    explicit Client_Manager(QObject *parent = 0);
+    explicit Client_Manager(Graphics_Manager* graphMan, QObject *parent = 0);
 public slots: 
     void	createNewClient(QHostAddress*);
 signals: 

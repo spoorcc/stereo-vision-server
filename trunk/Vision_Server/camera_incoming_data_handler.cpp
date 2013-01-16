@@ -11,6 +11,8 @@ void Camera_Incoming_Data_Handler::handleData(const uchar* data)
     {
         printRawData(data);
     }
+
+    QByteArray buffer = QByteArray::fromRawData((char*)data, sizeof(data));
 }
 
 void Camera_Incoming_Data_Handler::printRawData( const uchar* data )

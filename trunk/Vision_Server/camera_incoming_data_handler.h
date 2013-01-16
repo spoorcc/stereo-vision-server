@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QDebug>
+#include <QByteArray>
 #include <stdio.h>
 #include "qpcap/qpcap_qpcapethernetpacket.h"
 #include "qpcap/qpcap_qpcapippacket.h"
