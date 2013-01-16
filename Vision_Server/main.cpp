@@ -28,10 +28,10 @@ int main(int argc, char *argv[])
     Graphics_Manager graphMan(&app);
 
     //Camera Manager
-    //Camera_Manager camMan(&graphMan, &app);
+    Camera_Manager camMan(&graphMan, &app);
 
 	//////// Client Manager
-    Client_Manager clMan(&graphMan, &app);
+    //Client_Manager clMan(&graphMan, &app);
 
     return app.exec();
 }

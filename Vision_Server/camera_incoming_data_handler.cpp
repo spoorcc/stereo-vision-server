@@ -13,6 +13,14 @@ void Camera_Incoming_Data_Handler::handleData(const uchar* data)
     }
 
     QByteArray buffer = QByteArray::fromRawData((char*)data, sizeof(data));
+
+    //BJORN HIER KOMT DATA BINNEN
+
+
+
+
+
+
 }
 
 void Camera_Incoming_Data_Handler::printRawData( const uchar* data )

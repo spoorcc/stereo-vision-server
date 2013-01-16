@@ -24,5 +24,7 @@ Camera_Connection::Camera_Connection(QObject *parent) : QObject(parent)
 
 void Camera_Connection::sendPacket(Camera_Packet* packet)
 {
+    qDebug() << "[Camera Connection] Sending Packet, Size:" << packet->getBuffer()->size();
+
     pcap.sendPacket(packet->getBuffer());
 }
