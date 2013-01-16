@@ -37,7 +37,7 @@ bool Client_Data_Sender::sendPacket(Client_Packet* packet)
 	try
 	{
         connection.writeDataToClient(packet);
-        qDebug() << "[Client Data Sender] Packet sent";
+        qDebug() << "[Client Data Sender] Whole packet sent";
 		return true;
 	}
 	catch (std::exception& e)

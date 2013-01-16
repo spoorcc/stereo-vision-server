@@ -2,6 +2,27 @@
 
 Camera_Packet::Camera_Packet(QObject *parent)
 {
+    buffer.reserve(1500);
+    reset();
+}
+
+QByteArray* Camera_Packet::getBuffer()
+{
+    return &buffer;
+}
+
+int Camera_Packet::getBufferSize()
+{
+    return PACKET_MAXSIZE;
+}
+
+void Camera_Packet::appendString(QString c)
+{
+    buffer.append(c);
+}
+
+void Camera_Packet::reset()
+{
     // set mac destination address to 00 : 00 : 00 : 00 : 05 : 00
     buffer[0] = 0x00;
     buffer[1] = 0x00;
@@ -72,17 +93,25 @@ Camera_Packet::Camera_Packet(QObject *parent)
     buffer[41] = 0x00;
 }
 
-QByteArray* Camera_Packet::getBuffer()
+void Camera_Packet::changeAllHeaders(uint8_t _header, uint16_t _range, bool _read)
 {
-    return &buffer;
+    //Header
+    buffer[42] = _header;
+
+    //Range
+    buffer[43] = uint8_t(_range);
+    buffer[44] = uint8_t(_range >> 8);
+
+    if(_read){
+        //Read
+        buffer[45] = 0x00;
+    }else{
+        //Write
+        buffer[45] = 0x01;
+    }
 }
 
-int Camera_Packet::getBufferSize()
+void Camera_Packet::fillPacket()
 {
-    return PACKET_MAXSIZE;
-}
-
-void Camera_Packet::appendString(QString c)
-{
-    buffer.append(c);
+    //TODO Fill the packet, is this needed????????
 }

@@ -1,8 +1,9 @@
 #include "client_image_data_queuer.h"
 
-Client_Image_Data_Queuer::Client_Image_Data_Queuer(std::list<Client*> *clList, QObject *parent) : QObject(parent)
+Client_Image_Data_Queuer::Client_Image_Data_Queuer(std::list<Client*> *clList, Graphics_Manager* grMan, QObject *parent) : QObject(parent)
 {
     clientList = clList;
+    graphMan = grMan;
 }
 
 void Client_Image_Data_Queuer::handleImageData(QHostAddress clientAddress, uint8_t imgType, uint8_t imgStream, uint8_t stream)
@@ -64,18 +65,12 @@ void Client_Image_Data_Queuer::queueFrame(Client* client, uint8_t currentFrame, 
 
     //Add every char to the packet.
 
-    QImage image("/home/nick/stereo-vision-server/testimage.jpg");
-    image.convertToFormat(QImage::Format_RGB888);
-    image.scaled(640, 480, Qt::KeepAspectRatio);
 
-    QByteArray imageData;
-    QBuffer imageBuffer(&imageData);
-    imageBuffer.open(QIODevice::WriteOnly);
-    image.save(&imageBuffer, "JPEG");
+    //TODO imgData is in Graphics Manager
+    QByteArray* imgData = graphMan->getBuffer(0);
+    qDebug() << "Image Size: " << imgData->size();
 
-    qDebug() << "Image Size: " <<imageData.size();
-
-    packet.pushBack(&imageData);
+    packet.pushBack(imgData);
 
     //Send packet and reset packet
     client->QueuePacket(&packet);
