@@ -18,7 +18,7 @@ public:
 	explicit Graphics_Manager(QObject *parent = 0);
     void fillBuffer(QByteArray* buffer, int bufferId);
     QByteArray* getBuffer(int bufferId);
-    void fillBufferWithTestImage(int bufferId);
+    void fillBufferWithTestImage(QString fileName, int bufferId);
 private:
     std::deque<QByteArray*> imageByteArrayDeque;
 };

@@ -51,8 +51,13 @@ void Client_Send_Socket::writeDataToClient(Client_Packet* packet)
         int totalSent = 0;
         for(count = 0; count < packetCount; count++)
         {
-            cvWaitKey(10);
-            qDebug() << "Sending" << count;
+            //Settle data
+            if(count % 5)
+            {
+                cvWaitKey(1);
+            }
+
+            //qDebug() << "Sending" << count;
 
             done = write(packet->getBuffer()->mid(count * MAX_UDP_MESSAGE_SIZE, MAX_UDP_MESSAGE_SIZE));
             if(done == -1)

@@ -3,6 +3,7 @@
 
 #include "camera_connection.h"
 #include "camera_incoming_data_handler.h"
+#include "graphics_manager.h"
 #include <QObject>
 #include <stdio.h>
 
@@ -22,7 +23,8 @@ class Camera_Manager : public QObject
 {
     Q_OBJECT
 public:
-    explicit Camera_Manager(QObject *parent = 0);
+    explicit Camera_Manager(Graphics_Manager* graphMan, QObject *parent = 0);
+    QByteArray prepareSendArray(QByteArray* fromQbyteArray, int nr);
 private:
     Camera_Connection connection;
     Camera_Incoming_Data_Handler dataHandler;

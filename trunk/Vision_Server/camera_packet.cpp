@@ -2,7 +2,7 @@
 
 Camera_Packet::Camera_Packet(QObject *parent)
 {
-    buffer.reserve(1500);
+    buffer.resize(1070);
     reset();
 }
 
@@ -111,7 +111,14 @@ void Camera_Packet::changeAllHeaders(uint8_t _header, uint16_t _range, bool _rea
     }
 }
 
-void Camera_Packet::fillPacket()
+void Camera_Packet::addBuffer(QByteArray buf)
 {
-    //TODO Fill the packet, is this needed????????
+    buffer.push_back(buf);
 }
+
+/*void Camera_Packet::changeBuffer(QByteArray buf)
+{
+    //buffer[46] .
+}*/
+
+

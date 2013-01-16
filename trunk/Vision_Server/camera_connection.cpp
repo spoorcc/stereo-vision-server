@@ -20,11 +20,6 @@ Camera_Connection::Camera_Connection(QObject *parent) : QObject(parent)
     qDebug() << "[Camera Connection] Packet Capture started on " << device;
 
     pcap.start();
-
-    Camera_Packet testPacket;
-    testPacket.appendString("ABCD");
-
-    this->sendPacket(&testPacket);
 }
 
 void Camera_Connection::sendPacket(Camera_Packet* packet)

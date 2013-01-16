@@ -19,7 +19,7 @@ public:
     void appendString(QString c);
     void reset();
     void changeAllHeaders(uint8_t _header, uint16_t _range, bool _read);
-    void fillPacket();
+    void addBuffer(QByteArray buf);
 private:
     QByteArray buffer;
 
