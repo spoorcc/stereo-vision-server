@@ -46,13 +46,13 @@ void Client_Data_Queuer::queueFrame(Client* client, uint8_t currentFrame, uint8_
 	//Send one full frame
 
     //Create new packet
-    Client_Packet* packet = new Client_Packet(this);
+    Client_Packet packet(this);
 
     //Beginning of protocol image data
-    packet->addUint8(IMAGE_DATA, DATATYPE);
-    packet->addUint8(imageType, IMAGETYPE);
-    packet->addUint8(imageStream, STREAMID);
-    packet->addUint8(currentFrame, FRAMEID);
+    packet.addUint8(IMAGE_DATA, DATATYPE);
+    packet.addUint8(imageType, IMAGETYPE);
+    packet.addUint8(imageStream, STREAMID);
+    packet.addUint8(currentFrame, FRAMEID);
 
     //Add image data
     QByteArray* imgData;
@@ -67,13 +67,14 @@ void Client_Data_Queuer::queueFrame(Client* client, uint8_t currentFrame, uint8_
         qDebug() << "[Client Data Queuer] Graphics pointer is NULL";
     }
 
-
     qDebug() << "[Client Data Queuer] Image Size: " << imgData->size();
 
-    packet->pushBack(imgData);
+    packet.pushBack(imgData);
+
+    qDebug() << "Image packet data: " << packet.getBuffer()->at(0) << "Size: " << packet.getBuffer()->size();
 
     //Send packet
-    client->QueuePacket(packet);
+    client->QueuePacket(&packet);
 }
 
 void Client_Data_Queuer::queueXML(QHostAddress clientAddress)
