@@ -4,14 +4,19 @@ Client_Manager::Client_Manager(Graphics_Manager* graphMan, QObject *parent) : QO
 {
 	printf("[Client Manager] Client Manager started.\n");
 
-    imgDataQueuer = new Client_Image_Data_Queuer(&clients, graphMan, this);
+    dataQueuer = new Client_Data_Queuer(&clients, graphMan, this);
 
-    this->connect(imgDataQueuer, SIGNAL( noClientFound(QHostAddress*) ), this, SLOT( createNewClient(QHostAddress*) ));
+    this->connect(dataQueuer, SIGNAL( noClientFound(QHostAddress*) ), this, SLOT( createNewClient(QHostAddress*) ));
 
     msgCounter = new Message_Counter(this);
     msgCounter->connect(&dataReceiver, SIGNAL( addReceivedCount() ), SLOT( countReceivedUp() ));
 
-    imgDataQueuer->connect(&clientDataHandler, SIGNAL( newImageDataRequest(QHostAddress,uint8_t,uint8_t,uint8_t) ), SLOT( handleImageData(QHostAddress,uint8_t,uint8_t,uint8_t) ));
+    dataQueuer->connect(&clientDataHandler, SIGNAL( newImageDataRequest(QHostAddress,uint8_t,uint8_t,uint8_t) ), SLOT( queueImageData(QHostAddress,uint8_t,uint8_t,uint8_t) ));
+    dataQueuer->connect(&clientDataHandler, SIGNAL( newXMLRequest(QHostAddress) ), SLOT( queueXML(QHostAddress) ));
+
+    //XML on new connect
+    dataQueuer->connect(this, SIGNAL( newXMLRequest(QHostAddress) ), SLOT( queueXML(QHostAddress) ));
+
     clientDataHandler.connect(dataReceiver.getConnection(), SIGNAL( newDataReceived(QByteArray*, QHostAddress) ), SLOT( processDatagram(QByteArray*, QHostAddress) ) );
 }
 
@@ -43,6 +48,9 @@ void Client_Manager::createNewClient(QHostAddress* clientAddress)
 
 	//TODO Fix the msgCounter
     msgCounter->connect(newClient->getSender(), SIGNAL(addSentCount()), SLOT(countSendUp()));
+
+    //Send new XML
+    emit newXMLRequest(newClient->getHostAddress());
 
     return;
 }

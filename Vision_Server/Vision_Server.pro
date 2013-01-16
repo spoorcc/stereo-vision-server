@@ -20,7 +20,6 @@ SOURCES += main.cpp \
     client_receive_socket.cpp \
     client_packet.cpp \
     client_manager.cpp \
-    client_image_data_queuer.cpp \
     client_data_sender.cpp \
     client_data_receiver.cpp \
     client_data_handler.cpp \
@@ -30,7 +29,9 @@ SOURCES += main.cpp \
     camera_connection.cpp \
     qpcap/qpcap_qpcappacket.cpp \
     qpcap/qpcap_qpcap.cpp \
-    camera_incoming_data_handler.cpp
+    camera_incoming_data_handler.cpp \
+    graphics_manager.cpp \
+    client_data_queuer.cpp
 
 HEADERS += \
   #  packet_receiver.h \
@@ -41,7 +42,6 @@ HEADERS += \
     client_receive_socket.h \
     client_packet.h \
     client_manager.h \
-    client_image_data_queuer.h \
     client_data_sender.h \
     client_data_receiver.h \
     client_data_handler.h \
@@ -55,7 +55,9 @@ HEADERS += \
     qpcap/qpcap_qpcapethernetpacket.h \
     qpcap/qpcap_qpcap.h \
     camera_incoming_data_handler.h \
-    const.h
+    const.h \
+    graphics_manager.h \
+    client_data_queuer.h
 
 LIBS += -L/usr/local/lib \
 -lopencv_core \

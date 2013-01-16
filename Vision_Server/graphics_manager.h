@@ -3,9 +3,9 @@
 
 #include <QObject>
 #include <QByteArray>
-#include <QList>
 #include <QImage>
 #include <QBuffer>
+#include <QDebug>
 #include <opencv/highgui.h>
 #include <opencv/cv.h>
 
@@ -17,10 +17,10 @@ class Graphics_Manager : public QObject
 public:
 	explicit Graphics_Manager(QObject *parent = 0);
     void fillBuffer(QByteArray* buffer, int bufferId);
-    QByteArray* getBuffer(uint bufferId);
+    QByteArray* getBuffer(int bufferId);
     void fillBufferWithTestImage(int bufferId);
 private:
-    QList<QByteArray*> imageBuffer;
+    std::deque<QByteArray*> imageByteArrayDeque;
 };
 
 #endif /* GRAPHICS_MANAGER_H_ */
