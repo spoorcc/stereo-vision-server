@@ -23,15 +23,12 @@ int main(int argc, char *argv[])
     //QThread camManThread;
 
     //////////////////////////////
-    //Camera Manager
-    //Camera_Manager camMan(&app);
-    //////////////////////////////
-
-    //camMan.moveToThread(&camManThread);
-    //camManThread.start();
 
     //////// Graphics Manager
     Graphics_Manager graphMan(&app);
+
+    //Camera Manager
+    //Camera_Manager camMan(&graphMan, &app);
 
 	//////// Client Manager
     Client_Manager clMan(&graphMan, &app);
