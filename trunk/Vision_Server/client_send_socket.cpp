@@ -47,6 +47,7 @@ void Client_Send_Socket::writeDataToClient(Client_Packet* packet)
 
         //Write the amount of packets first
         write(msgLengthPacket);
+
         int totalSent = 0;
         for(count = 0; count < packetCount; count++)
         {
