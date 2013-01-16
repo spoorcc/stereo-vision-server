@@ -11,6 +11,7 @@
 #include <deque>
 #include <qstring.h>
 #include <qqueue.h>
+#include <QByteArray>
 
 #include "client_data_sender.h"
 
@@ -25,6 +26,7 @@ public:
     QString getIp(void);
     QHostAddress getHostAddress(void);
     void QueuePacket(Client_Packet*);
+    void QueuePacket(QByteArray* byteArray);
     Client_Data_Sender* getSender(void);
 private:
     Client_Data_Sender* dataSender;

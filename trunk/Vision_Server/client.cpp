@@ -33,6 +33,13 @@ QHostAddress Client::getHostAddress(void)
     return hostAddress;
 }
 
+void Client::QueuePacket(QByteArray* byteArray)
+{
+    Client_Packet* packet = new Client_Packet();
+    packet->setBuffer(byteArray);
+    QueuePacket(packet);
+}
+
 void Client::QueuePacket(Client_Packet* packet)
 {
     qDebug() << "[Client] Queue Packet";

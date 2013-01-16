@@ -13,7 +13,6 @@ void Client_Data_Sender::connectToClient(QHostAddress ip, int port)
 void Client_Data_Sender::handleSendBuffer()
 {
     printf("[Client Manager] start sending data\n");
-	//cout << client->ipAddress;
 
     while(buffer.empty() == false)
     {

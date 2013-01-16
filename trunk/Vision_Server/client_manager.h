@@ -5,7 +5,7 @@
 #include "message_counter.h"
 #include "client_server_protocol.h"
 #include "client_data_sender.h"
-#include "client_image_data_queuer.h"
+#include "client_data_queuer.h"
 #include "graphics_manager.h"
 
 #include <QTimer>
@@ -26,10 +26,11 @@ signals:
 	void	msgTimerTimeout();
 	void	clientInformation(Client*);
     void    updateCount();
+    void    newXMLRequest(QHostAddress);
 private:
     Message_Counter*         msgCounter;
     Client_Data_Receiver    dataReceiver;
-    Client_Image_Data_Queuer* imgDataQueuer;
+    Client_Data_Queuer* dataQueuer;
     Client_Data_Handler     clientDataHandler;
 	void	receiveDataFromClient(void);
 	void	handleData(std::vector<uint8_t>* bufferArray, QString* clientAddress);
