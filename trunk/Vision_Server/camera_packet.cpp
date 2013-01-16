@@ -2,7 +2,7 @@
 
 Camera_Packet::Camera_Packet(QObject *parent)
 {
-    buffer.resize(1070);
+    buffer.resize(46);
     reset();
 }
 

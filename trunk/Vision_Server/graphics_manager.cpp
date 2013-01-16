@@ -43,8 +43,8 @@ void Graphics_Manager::fillBufferWithTestImage(QString fileName, int bufferId)
         QBuffer imgBuffer(testArray);
         imgBuffer.open(QIODevice::WriteOnly);
 
-        //image.save(&imgBuffer, "BMP");
-        image.save(&imgBuffer, "JPEG");
+        image.save(&imgBuffer, "BMP");
+        //image.save(&imgBuffer, "JPEG");
 
         imageByteArrayDeque[bufferId] = testArray;
         qDebug() << "[Graphics Manager] Loaded image " << imageByteArrayDeque[bufferId] << "Size: " << imageByteArrayDeque[bufferId]->size();

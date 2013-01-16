@@ -25,6 +25,10 @@ void Client_Data_Handler::processDatagram(QByteArray* bufferArray, QHostAddress 
         emit newXMLRequest(clAddress);
         break;
     }
+    case SET_PARAMETER:
+
+        qDebug() << "[Client Manager] Set parameter " << QString(*bufferArray);
+        break;
 	default:
 		printf("[Client Manager] Wrong datatype received! datatype: %d\n", bufferArray->at(0));
 		break;

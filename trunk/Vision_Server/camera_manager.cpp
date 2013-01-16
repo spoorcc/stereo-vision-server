@@ -7,8 +7,8 @@ Camera_Manager::Camera_Manager(Graphics_Manager* graphMan, QObject *parent) : QO
     this->connect( &connection, SIGNAL(newPacket(const uchar *)), &dataHandler, SLOT(handleData(const uchar *)) );
 
     int i = 0;
-    Camera_Packet testPacket;
-    testPacket.reset();
+    Camera_Packet* testPacket = new Camera_Packet();
+
 
     QByteArray* test = graphMan->getBuffer(0);
 
@@ -16,9 +16,10 @@ Camera_Manager::Camera_Manager(Graphics_Manager* graphMan, QObject *parent) : QO
 
     for(i = 0; i < 300; i++)
     {
-        testPacket.changeAllHeaders(0xB0, i * 128,false);
-        testPacket.addBuffer(prepareSendArray(test,i));
-        connection.sendPacket(&testPacket);
+        testPacket = new Camera_Packet();
+        testPacket->changeAllHeaders(0xB0, i * 128,false);
+        testPacket->addBuffer(prepareSendArray(test,i));
+        connection.sendPacket(testPacket);
     }
 }
 
