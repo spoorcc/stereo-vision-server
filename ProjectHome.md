@@ -1,0 +1,1 @@
+The Stereo Vision server, used to handle GUI and/or Camera clients
